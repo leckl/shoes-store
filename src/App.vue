@@ -1,37 +1,45 @@
 <script>
   import { RouterLink, RouterView } from 'vue-router';
+  import MainBlock from './components/MainBlock.vue';
   export default {
+    components: {
+      MainBlock
+    }
 }
 </script>
 
 <template>
   <div class="wrapper">
-    <header class="headerContainer container">
-      <router-link class="logo" to="/">Atlas</router-link>
-      <ul class="headerNav">
-        <li>
-            <router-link to="/">Новинки</router-link>
-        </li>
-        <li>
-            <router-link to="/bebe">Скидки</router-link>
-        </li>
-        <li>
-            <router-link to="/bubu">Любая погода</router-link>
-        </li>
-        <li>
-            <router-link to="/bubu">Снег</router-link>
-        </li>
-        <li>
-            <router-link to="/bubu">О нас</router-link>
-        </li>
-      </ul>
-      <ul class="svgHeaderMenu">
-        <li><img src="./assets/Serarch.svg" alt="Search"></li>
-        <li><img src="./assets/Profile.svg" alt="Profile"></li>
-        <li><img src="./assets/Cart.svg" alt="Cart"></li>
-      </ul>
+    <header>
+      <div class="container headerCoontainer">
+        <router-link class="logo" to="/">Atlas</router-link>
+        <ul class="headerNav">
+          <li>
+              <router-link to="/">Новинки</router-link>
+          </li>
+          <li>
+              <router-link to="/">Скидки</router-link>
+          </li>
+          <li>
+              <router-link to="/">Любая погода</router-link>
+          </li>
+          <li>
+              <router-link to="/">Снег</router-link>
+          </li>
+          <li>
+              <router-link to="/">О нас</router-link>
+          </li>
+        </ul>
+        <ul class="svgHeaderMenu">
+          <li><img src="./assets/Serarch.svg" alt="Search"></li>
+          <li><img src="./assets/Profile.svg" alt="Profile"></li>
+          <li><img src="./assets/Cart.svg" alt="Cart"></li>
+        </ul>
+      </div> 
   </header>
-  <router-view></router-view>
+  <main>
+    <router-view></router-view>
+  </main>
   </div>
 
 </template>
@@ -52,7 +60,7 @@
   max-width: 1300px;
   margin: 0 auto;
 }
-header{
+.headerCoontainer{
   position: relative;
   display: flex;
   align-items: center;
@@ -86,4 +94,4 @@ header{
   gap: 25px;
   list-style-type: none;
 }
-</style>
+</style>./components/MainBlock.vue

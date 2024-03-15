@@ -43,14 +43,15 @@ export default {
   }
   .subPhrase{
     color: #fff;
-    font-size: 22px;
+    font-size: 25px;
     margin: 15px 0;
   }
   .buyButton{
     background-color: #fff;
-    padding: 15px 47px;
+    padding: 15px 45px;
     border: 0;
-    font-size: 15px;
+    font-size: 22px;
     border-radius: 5px;
+    cursor: pointer;
   }
 </style>

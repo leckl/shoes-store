@@ -49,6 +49,9 @@
   font-family: Condiment;
   src: url('./assets/Condiment-Regular.ttf');
 }
+html{
+  overflow-x: hidden;
+}
 *{
   margin: 0;
   padding: 0;
@@ -56,20 +59,26 @@
   box-sizing: border-box;
 }
 .container{
-  padding: 0px 15px;
+  padding: 0px 50px;
   max-width: 1300px;
   margin: 0 auto;
+}
+header{
+  background-color: #fff;
+  position: sticky;
+  top: 0px;
+  border-bottom: 1px solid rgba(18, 48, 38, 0.1);
 }
 .headerCoontainer{
   position: relative;
   display: flex;
   align-items: center;
-  min-height: 120px;
+  min-height: 100px;
 }
 .logo{
   color: #123026;
   font-family: Condiment;
-  font-size: 64px;
+  font-size: 50px;
   text-decoration: none;
   margin-right: 55px;
 }
@@ -94,4 +103,7 @@
   gap: 25px;
   list-style-type: none;
 }
-</style>./components/MainBlock.vue
+@media screen and (max-width: 900px) {
+  
+}
+</style>

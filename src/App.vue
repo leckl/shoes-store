@@ -59,7 +59,7 @@ html{
   box-sizing: border-box;
 }
 .container{
-  padding: 0px 50px;
+  padding: 0px 20px;
   max-width: 1300px;
   margin: 0 auto;
 }

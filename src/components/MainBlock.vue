@@ -3,12 +3,16 @@
     import Slogan from './Slogan.vue';
     import Categories from './Categories.vue';
     import AddBlockTwo from './AddBlockTwo.vue';
+    import AmountAction from './AmountAction.vue';
+    import SliderBlock from './SliderBlock.vue';
     export default {
         components: {
             AddBlock,
             Slogan,
             Categories,
             AddBlockTwo,
+            AmountAction,
+            SliderBlock,
         }
     }
 </script>
@@ -17,4 +21,6 @@
     <Slogan></Slogan>
     <Categories></Categories>
     <AddBlockTwo></AddBlockTwo>
+    <AmountAction></AmountAction>
+    <SliderBlock></SliderBlock>
 </template>

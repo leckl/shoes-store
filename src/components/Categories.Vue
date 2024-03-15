@@ -28,6 +28,9 @@
     display: flex;
     gap: 8px;
   }
+  .categorie{
+    cursor: pointer;
+  }
   .categorieImage{
     width: 100%;
     height: auto;

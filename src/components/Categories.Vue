@@ -1,24 +1,25 @@
 <script>
+import { RouterLink } from 'vue-router';
 </script>
 <template>
   <section class="categories">
     <div class="container categoriesContaier">
-      <div class="categorie">
+      <router-link to="/" class="categorie">
         <img class="categorieImage" src="../assets/landingImage/CategoriesImg.jpg" alt="Categories">
         <p class="categoriesName">Осень <img src="../assets/landingImage/LeftMore.svg" alt="More"></p>
-      </div>
-      <div class="categorie">
+      </router-link>
+      <router-link to="/" class="categorie">
         <img class="categorieImage" src="../assets/landingImage/CategoriesImg.jpg" alt="Categories">
         <p class="categoriesName">Зима <img src="../assets/landingImage/LeftMore.svg" alt="More"></p>
-      </div>
-      <div class="categorie">
+      </router-link>
+      <router-link to="/" class="categorie">
         <img class="categorieImage" src="../assets/landingImage/CategoriesImg.jpg" alt="Categories">
         <p class="categoriesName">Весна <img src="../assets/landingImage/LeftMore.svg" alt="More"></p>
-      </div>
-      <div class="categorie">
+      </router-link>
+      <router-link to="/" class="categorie">
         <img class="categorieImage" src="../assets/landingImage/CategoriesImg.jpg" alt="Categories">
         <p class="categoriesName">Лето <img src="../assets/landingImage/LeftMore.svg" alt="More"></p>
-      </div>
+      </router-link>
     </div>
   </section>
 </template>
@@ -29,7 +30,9 @@
     gap: 8px;
   }
   .categorie{
+    display: block;
     cursor: pointer;
+    text-decoration: none;
   }
   .categorieImage{
     width: 100%;

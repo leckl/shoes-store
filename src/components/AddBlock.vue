@@ -1,11 +1,12 @@
 <script>
-export default {
-  data() {
-  return{
-    phrase: 'Водонепроницаемый.<br>Постоянный комфорт'
+  import { RouterLink } from 'vue-router';
+  export default {
+    data() {
+    return{
+      phrase: 'Водонепроницаемый.<br>Постоянный комфорт'
+    }
+    }
   }
-  }
-}
 </script>
 <template>
   <section class="addBlock">
@@ -13,7 +14,7 @@ export default {
     <div class="addBlockPhraseContainer">
       <p class="mainPhrase">Водонепроницаемы Постоянный комфорт</p>
       <p class="subPhrase">Новая коллекция уже здесь</p>
-      <button class="buyButton">Купить</button>
+      <router-link to="/" class="buyButton">Купить</router-link>
     </div>
   </div>
   </section>
@@ -47,7 +48,10 @@ export default {
     margin: 15px 0;
   }
   .buyButton{
+    display: inline-block;
     background-color: #fff;
+    color: black;
+    text-decoration: none;
     padding: 15px 45px;
     border: 0;
     font-size: 22px;

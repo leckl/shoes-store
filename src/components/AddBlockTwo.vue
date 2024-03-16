@@ -1,5 +1,5 @@
 <script>
-    
+    import { RouterLink } from 'vue-router';
 </script>
 <template>
     <section class="addBlockTwo">
@@ -7,7 +7,7 @@
             <div class="addBlockTwoPhraseContainer">
                 <p class="mainPhrase">Оставайтесь в уюте весь год</p>
                 <p class="subPhrase">Наши самые продаваемые ботинки, но обновлённые</p>
-                <button class="buyButtonTwo">Узнать больше</button>
+                <router-link to="/" class="buyButtonTwo">Узнать больше</router-link>
             </div>
         </div>
     </section>
@@ -32,6 +32,9 @@
         max-width: 30rem;
     }
     .buyButtonTwo{
+        display: inline-block;
+        color: black;
+        text-decoration: none;
         background-color: #fff;
         padding: 15px 20px;
         border: 0;

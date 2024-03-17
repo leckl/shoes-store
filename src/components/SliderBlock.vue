@@ -3,92 +3,77 @@
     export default {
         data() {
             return {
-                products: [
+                products: [ //Это начальный пример работы (Позже будет выполняться с базой данных)
                     {
                         productId: 0,
                         productName: 'Обувь 1',
                         productPrice: '199$',
-                        productStock: true
+                        productIsStock: true
                     },
                     {
                         productId: 1,
                         productName: 'Обувь 2',
                         productPrice: '199$',
-                        productStock: true
+                        productIsStock: true
                     },
                     {
                         productId: 2,
                         productName: 'Обувь 3',
                         productPrice: '199$',
-                        productStock: false
+                        productIsStock: false
                     },
                     {
                         productId: 3,
                         productName: 'Обувь 4',
                         productPrice: '199$',
-                        productStock: true
+                        productIsStock: true
+                    },
+                    {
+                        productId: 4,
+                        productName: 'Обувь 5',
+                        productPrice: '199$',
+                        productIsStock: true
+                    },
+                    {
+                        productId: 5,
+                        productName: 'Обувь 6',
+                        productPrice: '199$',
+                        productIsStock: true
                     }
                 ],
-            }
-        },
-        computed: {
-            name(){
-                for (let i = 0; i <= this.products.length; i++) {
-                    return this.products.map(product => product.productName) 
-                }
-            },
-            isStock(){
-                return this.products.productStock
             }
         },
     };
 </script>
 <template>
         <section class="sliderBlock">
-            <div class="sliderBlockContainer">
-                <div class="sliderElement">
+            <router-link to="/" class="sliderBlockContainer">
+                <div class="sliderElement" v-for="(product, index) in products" :key="index">
                     <img class="sliderImage" src="../assets/landingImage/SliderImage.jpg" alt="Slider element">
-                    <div class="soldOut" v-if="isStock">Sold out!</div>
-                    <p class="sliderName">{{ name }}</p>
-                    <p class="sliderPrice">199$</p>
+                    <!-- <div class="soldOut" v-if="product.productIsStock">Sold out!</div> В разработке -->
+                    <p class="sliderName">{{ product.productName }}</p>
+                    <p class="sliderPrice">{{ product.productPrice }}</p>
                     <button class="sliderButton">Add to cart</button>
                 </div>
-                <div class="sliderElement">
-                    <img class="sliderImage" src="../assets/landingImage/SliderImage.jpg" alt="Slider element">
-                    <div class="soldOut" v-if="isStock">Sold out!</div>
-                    <p class="sliderName">{{ name }}</p>
-                    <p class="sliderPrice">199$</p>
-                    <button class="sliderButton">Add to cart</button>
-                </div>
-                <div class="sliderElement">
-                    <img class="sliderImage" src="../assets/landingImage/SliderImage.jpg" alt="Slider element">
-                    <div class="soldOut" v-if="isStock">Sold out!</div>
-                    <p class="sliderName">{{ name }}</p>
-                    <p class="sliderPrice">199$</p>
-                    <button class="sliderButton">Add to cart</button>
-                </div>
-                <div class="sliderElement">
-                    <img class="sliderImage" src="../assets/landingImage/SliderImage.jpg" alt="Slider element">
-                    <div class="soldOut" v-if="isStock">Sold out!</div>
-                    <p class="sliderName">{{ name }}</p>
-                    <p class="sliderPrice">199$</p>
-                    <button class="sliderButton">Add to cart</button>
-                </div>
-            </div>
+            </router-link> 
         </section>
 </template>
 <style>
     .sliderBlockContainer{
+        color: black;
+        text-decoration: none;
         display: flex;
         gap: 10px;
         padding: 0 20px;
         margin-bottom: 80px;
     }
     .sliderElement{
+        position: relative;
         width: 25%;
         cursor: pointer;
     }
     .sliderImage{
+        position: relative;
         width: 100%;
         height: auto;
         object-fit: cover;
@@ -114,7 +99,11 @@
         cursor: pointer;
     }
     .soldOut{
-        padding: 5px 15px;
+        border-radius: 40px;
+        font-size: 1rem;
+        position: absolute;
+        bottom: 8px;
+        left: 10px;
         color: #fff;
         background-color: #123026;
     }

@@ -66,6 +66,7 @@ html{
 header{
   background-color: #fff;
   position: sticky;
+  z-index: 50;
   top: 0px;
   border-bottom: 1px solid rgba(18, 48, 38, 0.1);
 }

@@ -132,21 +132,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- <div v-if="!isWideScreen" class="slider">
-            <div v-for="(product, index) in products" :key="index" class="sliderBlockContainer">
-                <router-link to="/" class="sliderElement">
-                    <img class="sliderImage" src="../assets/landingImage/SliderImage.jpg" alt="Slider element">
-                    <div class="soldOut" v-if="product.productIsStock">Sold out!</div> В разработке
-                    <p class="sliderName">{{ product.productName }}</p>
-                    <p class="sliderPrice">{{ product.productPrice }}</p>
-                    <button class="sliderButton">Add to cart</button>
-                </router-link> 
-            </div>
-        </div> -->
-
-        <!-- ToDo: Кастомизировать стрелки -->
-        <!-- ToDo: Сделать адаптив заменив тэг swiper на div через v-if с условием длины экрана -->
 </template>
 <style>
     .sliderContainer__mobile{

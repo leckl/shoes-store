@@ -5,6 +5,7 @@
     import AddBlockTwo from './AddBlockTwo.vue';
     import AmountAction from './AmountAction.vue';
     import SliderBlock from './SliderBlock.vue';
+    import EcologyInfoBlock from './EcologyInfoBlock.vue'
     export default {
         components: {
             AddBlock,
@@ -13,6 +14,7 @@
             AddBlockTwo,
             AmountAction,
             SliderBlock,
+            EcologyInfoBlock,
         }
     }
 </script>
@@ -23,4 +25,5 @@
     <AddBlockTwo></AddBlockTwo>
     <AmountAction></AmountAction>
     <SliderBlock></SliderBlock>
+    <EcologyInfoBlock></EcologyInfoBlock>
 </template>

@@ -1,29 +1,95 @@
 <script>
-import { RouterLink } from 'vue-router';
+  import { RouterLink } from 'vue-router';
+  export default{
+    data() {
+      return {
+        catedories: [
+          {
+            categoriesId: 0,
+            categoriesName: 'Осень',
+          },
+          {
+            categoriesId: 1,
+            categoriesName: 'Зима',
+          },
+          {
+            categoriesId: 2,
+            categoriesName: 'Весна',
+          },
+          {
+            categoriesId: 3,
+            categoriesName: 'Лето',
+          },
+        ],
+        isWideScreen: window.innerWidth > 990,
+        cols: 2,
+      }
+    },
+    created(){
+      window.addEventListener('resize', this.handleResize)
+      },
+      methods: {
+        handleResize(){
+            this.isWideScreen = window.innerWidth > 990
+        }
+      },
+      beforeDestroy() {
+        window.removeEventListener('resize', this.handleResize)
+      },
+      computed: {
+        columns() {
+            let columns = []
+            let mid = Math.ceil(this.catedories.length / this.cols)
+            for (let col = 0; col < this.cols; col++) {
+                columns.push(this.catedories.slice(col * mid, col * mid + mid))
+            }
+              return columns
+          }
+      }
+    } 
 </script>
 <template>
   <section class="categories">
-    <div class="container categoriesContaier">
-      <router-link to="/" class="categorie">
+    <div v-if="isWideScreen" class="container categoriesContaier">
+      <router-link v-for="(categorie, key) in catedories" :key="key" to="/" class="categorie">
         <img class="categorieImage" src="../assets/landingImage/CategoriesImg.jpg" alt="Categories">
-        <p class="categoriesName">Осень <img src="../assets/landingImage/LeftMore.svg" alt="More"></p>
+        <p class="categoriesName">{{ categorie.categoriesName }}<img src="../assets/landingImage/LeftMore.svg" alt="More"></p>
       </router-link>
-      <router-link to="/" class="categorie">
-        <img class="categorieImage" src="../assets/landingImage/CategoriesImg.jpg" alt="Categories">
-        <p class="categoriesName">Зима <img src="../assets/landingImage/LeftMore.svg" alt="More"></p>
-      </router-link>
-      <router-link to="/" class="categorie">
-        <img class="categorieImage" src="../assets/landingImage/CategoriesImg.jpg" alt="Categories">
-        <p class="categoriesName">Весна <img src="../assets/landingImage/LeftMore.svg" alt="More"></p>
-      </router-link>
-      <router-link to="/" class="categorie">
-        <img class="categorieImage" src="../assets/landingImage/CategoriesImg.jpg" alt="Categories">
-        <p class="categoriesName">Лето <img src="../assets/landingImage/LeftMore.svg" alt="More"></p>
-      </router-link>
+    </div>
+    <div v-if="!isWideScreen" class="categoriesContainer__mobile">
+        <div class="categoriesColumn__mobile" v-for="(column, index) in columns">
+          <div class="categoriesContainer__mobile" v-for="(categorie, key) in column">
+            <router-link class="categorie" to="/">
+              <img class="categorieImage" src="../assets/landingImage/CategoriesImg.jpg">
+              <p class="categoriesName__mobile">{{ categorie.categoriesName }} <img src="../assets/landingImage/LeftMore.svg" alt="More"></p>
+            </router-link>
+          </div>
+        </div>
     </div>
   </section>
 </template>
 <style>
+  .categoriesContainer__mobile{
+    display: flex;
+    padding: 0 20px;
+  }
+  .categoriesColumn__mobile{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .categoriesColumn__mobile:not(:nth-child(even)){
+    margin-right: 10px;
+  }
+  .categoriesContainer__mobile{
+    padding: 5px;
+    margin: 5px;
+  }
+  .categoriesName__mobile{
+    margin-top: 15px;
+    font-weight: 600;
+    margin-top: 5px;
+  }
   .categoriesContaier{
     padding-bottom: 80px !important; 
     display: flex;
@@ -33,15 +99,24 @@ import { RouterLink } from 'vue-router';
     display: block;
     cursor: pointer;
     text-decoration: none;
+    color: #123026;
+    text-decoration: none;
   }
   .categorieImage{
     width: 100%;
     height: auto;
     object-fit: cover;
+
   }
   .categoriesName{
     margin-top: 15px;
     font-weight: 600;
     color: #123026;
+  }
+  .categoriesName__mobile img{
+    margin-left: 3px;
+  }
+  .categoriesName img{
+    margin-left: 7px;
   }
 </style>

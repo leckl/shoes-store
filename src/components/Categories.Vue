@@ -3,7 +3,7 @@
   export default{
     data() {
       return {
-        catedories: [
+        categories: [
           {
             categoriesId: 0,
             categoriesName: 'Осень',
@@ -39,9 +39,9 @@
       computed: {
         columns() {
             let columns = []
-            let mid = Math.ceil(this.catedories.length / this.cols)
+            let mid = Math.ceil(this.categories.length / this.cols)
             for (let col = 0; col < this.cols; col++) {
-                columns.push(this.catedories.slice(col * mid, col * mid + mid))
+                columns.push(this.categories.slice(col * mid, col * mid + mid))
             }
               return columns
           }
@@ -51,14 +51,17 @@
 <template>
   <section class="categories">
     <div v-if="isWideScreen" class="container categoriesContaier">
-      <router-link v-for="(categorie, key) in catedories" :key="key" to="/" class="categorie">
+      <router-link v-for="(categorie, key) in categories" :key="key" to="/" class="categorie">
         <img class="categorieImage" src="../assets/landingImage/CategoriesImg.jpg" alt="Categories">
         <p class="categoriesName">{{ categorie.categoriesName }}<img src="../assets/landingImage/LeftMore.svg" alt="More"></p>
       </router-link>
     </div>
+
+    <!-- Mobile version -->
+
     <div v-if="!isWideScreen" class="categoriesContainer__mobile">
         <div class="categoriesColumn__mobile" v-for="(column, index) in columns">
-          <div class="categoriesContainer__mobile" v-for="(categorie, key) in column">
+          <div class="categorieContainer__mobile" v-for="(categorie, key) in column">
             <router-link class="categorie" to="/">
               <img class="categorieImage" src="../assets/landingImage/CategoriesImg.jpg">
               <p class="categoriesName__mobile">{{ categorie.categoriesName }} <img src="../assets/landingImage/LeftMore.svg" alt="More"></p>
@@ -71,7 +74,7 @@
 <style>
   .categoriesContainer__mobile{
     display: flex;
-    padding: 0 20px;
+    padding: 0 20px !important;
   }
   .categoriesColumn__mobile{
     flex-grow: 1;
@@ -81,7 +84,7 @@
   .categoriesColumn__mobile:not(:nth-child(even)){
     margin-right: 10px;
   }
-  .categoriesContainer__mobile{
+  .categorieContainer__mobile{
     padding: 5px;
     margin: 5px;
   }
@@ -89,6 +92,9 @@
     margin-top: 15px;
     font-weight: 600;
     margin-top: 5px;
+  }
+  .categories{
+    margin-bottom: 80px;
   }
   .categoriesContaier{
     padding-bottom: 80px !important; 
@@ -106,7 +112,6 @@
     width: 100%;
     height: auto;
     object-fit: cover;
-
   }
   .categoriesName{
     margin-top: 15px;

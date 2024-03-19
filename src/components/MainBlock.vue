@@ -5,7 +5,8 @@
     import AddBlockTwo from './AddBlockTwo.vue';
     import AmountAction from './AmountAction.vue';
     import SliderBlock from './SliderBlock.vue';
-    import EcologyInfoBlock from './EcologyInfoBlock.vue'
+    import EcologyInfoBlock from './EcologyInfoBlock.vue';
+    import BestSellers from './BestSellers.vue'
     export default {
         components: {
             AddBlock,
@@ -15,6 +16,7 @@
             AmountAction,
             SliderBlock,
             EcologyInfoBlock,
+            BestSellers,
         }
     }
 </script>
@@ -26,4 +28,5 @@
     <AmountAction></AmountAction>
     <SliderBlock></SliderBlock>
     <EcologyInfoBlock></EcologyInfoBlock>
+    <BestSellers></BestSellers>
 </template>

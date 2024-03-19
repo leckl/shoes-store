@@ -9,9 +9,9 @@
                     <img class="ecologyImage" src="../assets/landingImage/EcologyImg.jpg" alt="Ecology image">
                 </div>
                 <div class="textContainer">
-                    <h2 claass="textContainerName">Мы заботимся о экологии также как о клиентах</h2>
-                    <p class="textContainerPhrase">В магазине Atlas мы верим в движение к зеленому будущему, шаг за шагом. Поэтому наша коллекция экологичной обуви – это не просто стиль и комфорт, это возможность оказать позитивное влияние на планету.</p>
-                    <router-link class="textContainerButton" to="/">Узнать больше</router-link>
+                    <h2 class="ecologyName">Мы заботимся о экологии также как о клиентах</h2>
+                    <p class="ecologyPhrase">В магазине Atlas мы верим в движение к зеленому будущему, шаг за шагом. Поэтому наша коллекция экологичной обуви – это не просто стиль и комфорт, это возможность оказать позитивное влияние на планету.</p>
+                    <router-link class="ecologyButton" to="/">Узнать больше</router-link>
                 </div>
             </div>
             <!-- ToDo: заменить большие font-size на h1, h2 и т.д. -->
@@ -25,13 +25,46 @@
     .contentContainer{
         display: flex;
     }
+    @media screen and (max-width: 990px) {
+        .contentContainer{
+            flex-direction: column;
+        }
+        .textContainer, .imageContainer{
+            width: 100%;
+        }
+    }
     .textContainer{
+        width: 50%;
         background-color: #F3F3F3;
+        padding: 100px 55px;
+        max-height: 650px;
+    }
+    .ecologyName{
+        font-size: 40px;
+        color: #123026;
+        margin-bottom: 50px;
+    }
+    .ecologyPhrase{
+        color: rgba(18, 48, 38, 0.75);
+        font-size: 21px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+    .ecologyButton{
+        display: inline-block;
+        color: white;
+        background-color: #123026;
+        padding: 15px;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+    .imageContainer{
+        overflow: hidden;
+        width: 50%;
     }
     .ecologyImage{
-        position: relative;
-        object-fit: cover;
         width: 100%;
         height: 100%;
+        object-fit: cover;
     }
 </style>

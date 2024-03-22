@@ -1,5 +1,5 @@
 <script>
-  import { RouterLink } from 'vue-router';
+      import { RouterLink } from 'vue-router';
   export default{
   data() {
     return {
@@ -53,96 +53,74 @@
   } 
 </script>
 <template>
-  <section class="bestSellers">
-    <div class="container bestSellersContainer">
-      <div class="bestSellersMainNameContainer">
-        <h2 class="bestSellersMainName">Наши бестселлеры</h2>
+      <section class="telegramBlock">
+    <div class="container telegramBlockContainer">
+      <div class="telegramBlockMainNameContainer">
+        <h2 class="telegramBlockMainName">Следите за нами в Телеграм</h2>
+        <router-link class="telegramBlockLink" to="/">@atlas-shoes</router-link>
       </div>
-      <div v-if="isWideScreen" class="bestSellersCardContainer">
-        <router-link v-for="(bestSeller, key) in bestSellers" :key="key" to="/" class="bestSeller">
-          <img class="bestSellerImage" src="../assets/landingImage/bestSellers/bestSeller1.jpg" alt="Best seller">
+      <div v-if="isWideScreen" class="telegramBlockCardContainer">
+        <router-link v-for="(bestSeller, key) in bestSellers" :key="key" to="/" class="telegramImageContainer">
+          <img class="telegramBlockImage" src="../assets/landingImage/bestSellers/bestSeller1.jpg" alt="Telegram inage">
           <!-- Доделать лирективу :src -->
-          <p class="bestSellerName">{{ bestSeller.bestSellerName }}<img src="../assets/landingImage/LeftMore.svg" alt="More"></p>
         </router-link>
       </div>
 
       <!-- Mobile version -->
 
-      <div class="bestSellersContainer__mobile" v-if="!isWideScreen">
-        <div class="bestSellersColumn__mobile" v-for="(column, index) in columns" :key="index">
-          <router-link to="/" class="bestSeller" v-for="(bestSeller, key) in column" :key="key">
-            <img class="bestSellerImage" src="../assets/landingImage/bestSellers/bestSeller1.jpg" alt="Best seller">
+      <div class="telegramBlockContainer__mobile" v-if="!isWideScreen">
+        <div class="telegramBlockColumn__mobile" v-for="(column, index) in columns" :key="index">
+          <router-link to="/" class="telegramImageContainer" v-for="(bestSeller, key) in column" :key="key">
+            <img class="telegramBlockImage" src="../assets/landingImage/bestSellers/bestSeller1.jpg" alt="Best seller">
             <!-- Доделать лирективу :src -->
-            <p class="bestSellerName">{{ bestSeller.bestSellerName }}<img src="../assets/landingImage/LeftMore.svg" alt="More"></p>
           </router-link>
         </div>
-      </div>
-
-      <div class="bestSellerButtonContainer">
-          <router-link class="bestSellerButton" to="/">Купить бестселлеры</router-link>
       </div>
     </div>
 
     <!-- ToDo: Провести адаптив для самой маленькой ширины, а особенно в блоке Ecology и карточка слайдера и подобных -->
     <!-- ToDo: Оптимизировать код в плане добавления h2 и понятности -->
 
-    <!-- ToDo: Баги при малой ширине вызывает хэдер и AddBlock. В хэдере надо добавить бургер меню а в AddBlock просто сделать всё меньше -->
-    
   </section>
 </template>
 <style>
-  .bestSellersContainer__mobile{
+  .telegramBlockContainer__mobile{
     display: flex;
   }
-  .bestSellersColumn__mobile{
+  .telegramBlockColumn__mobile{
     flex-grow: 1;
     display: flex;
     flex-direction: column;
   }
-  .bestSellersColumn__mobile:nth-child(odd){
+  .telegramBlockColumn__mobile:nth-child(odd){
     margin-right: 4px;
   }
-  .bestSellers{
+  .telegramBlock{
     margin-bottom: 80px;
   }
-  .bestSellersMainNameContainer{
+  .telegramBlockMainNameContainer{
     text-align: center;
   }
-  .bestSellersMainName{
+  .telegramBlockMainName{
     font-size: 40px;
     font-weight: 600;
     color: #123026;
+  }
+  .telegramBlockLink{
+    display: block;
+    font-size: 40px;
+    font-weight: 600;
+    text-decoration: underline;
+    color: #123026;
     margin-bottom: 40px;
   }
-  .bestSellersCardContainer{
+  .telegramBlockCardContainer{
       display: flex;
       gap: 8px;
   }
-  .bestSellerImage{
+  .telegramBlockImage{
       width: 100%;
       height: auto;
       object-fit: cover;
-  }
-  .bestSellerName{
-    margin-top: 15px;
-  }
-  .bestSellerName img{
-    margin-left: 7px;
-  }
-  .bestSeller{
-    margin-bottom: 50px;
-    color: #123026;
-    text-decoration: none;
-  }
-  .bestSellerButtonContainer{
-    display: flex;
-    justify-content: center;
-  }
-  .bestSellerButton{
-    color: white;
-    background-color: #123026;
-    padding: 15px;
-    border-radius: 5px;
-    text-decoration: none;
   }
 </style>

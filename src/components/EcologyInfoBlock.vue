@@ -30,7 +30,10 @@
             flex-direction: column;
         }
         .textContainer, .imageContainer{
-            width: 100%;
+            width: 100% !important;
+        }
+        .textContainer{
+            height: auto !important;
         }
     }
     .textContainer{

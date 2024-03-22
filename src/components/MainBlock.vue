@@ -6,7 +6,11 @@
     import AmountAction from './AmountAction.vue';
     import SliderBlock from './SliderBlock.vue';
     import EcologyInfoBlock from './EcologyInfoBlock.vue';
-    import BestSellers from './BestSellers.vue'
+    import BestSellers from './BestSellers.vue';
+    import HelpBlock from './HelpBlock.vue';
+    import TelegramBlock from './TelegramBlock.vue';
+    import EmailBlock from './EmailBlock.vue';
+    import Footer from './Footer.vue'
     export default {
         components: {
             AddBlock,
@@ -17,6 +21,10 @@
             SliderBlock,
             EcologyInfoBlock,
             BestSellers,
+            HelpBlock,
+            TelegramBlock,
+            EmailBlock,
+            Footer,
         }
     }
 </script>
@@ -29,4 +37,8 @@
     <SliderBlock></SliderBlock>
     <EcologyInfoBlock></EcologyInfoBlock>
     <BestSellers></BestSellers>
+    <HelpBlock></HelpBlock>
+    <TelegramBlock></TelegramBlock>
+    <EmailBlock></EmailBlock>
+    <Footer></Footer>
 </template>

@@ -61,13 +61,15 @@
 
     <div v-if="!isWideScreen" class="categoriesContainer__mobile">
         <div class="categoriesColumn__mobile" v-for="(column, index) in columns">
-          <div class="categorieContainer__mobile" v-for="(categorie, key) in column">
-            <router-link class="categorie" to="/">
+            <router-link class="categorie categorieContainer__mobile" to="/" v-for="(categorie, key) in column">
               <img class="categorieImage" src="../assets/landingImage/CategoriesImg.jpg">
               <p class="categoriesName__mobile">{{ categorie.categoriesName }} <img src="../assets/landingImage/LeftMore.svg" alt="More"></p>
             </router-link>
-          </div>
         </div>
+
+        <!-- ToDo: Провести адаптив для самоё маленькой ширины, а особенно в блоке Ecology и карточка слайдера и подобных -->
+        <!-- ToDo: Оптимизировать код в плане добавления h2 и понятности -->
+
     </div>
   </section>
 </template>
@@ -81,12 +83,12 @@
     display: flex;
     flex-direction: column;
   }
-  .categoriesColumn__mobile:not(:nth-child(even)){
+  .categoriesColumn__mobile:nth-child(odd){
     margin-right: 10px;
   }
   .categorieContainer__mobile{
-    padding: 5px;
-    margin: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
   }
   .categoriesName__mobile{
     margin-top: 15px;

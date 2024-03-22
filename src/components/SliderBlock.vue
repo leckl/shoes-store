@@ -147,8 +147,8 @@
         margin-right: 10px;
     }
     .sliderBlockContainer__mobile{
-        padding: 5px;
-        margin: 5px;
+        padding-bottom: 5px;
+        margin-bottom: 5px;
     }
     .sliderButtons{
         display: flex;

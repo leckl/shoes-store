@@ -107,12 +107,15 @@
     color: #123026;
   }
   .telegramBlockLink{
-    display: block;
+    display: inline-block;
     font-size: 40px;
     font-weight: 600;
-    text-decoration: underline;
+    text-decoration: none;
+    padding-bottom:0;
+    border-bottom: 3px solid #123026;
     color: #123026;
     margin-bottom: 40px;
+    outline: none;
   }
   .telegramBlockCardContainer{
       display: flex;

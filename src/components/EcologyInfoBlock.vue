@@ -36,11 +36,18 @@
             height: auto !important;
         }
     }
+    @media screen and (max-width: 420px){
+        .textContainer{
+            padding: 30px 15px !important;
+        }
+        .ecologyName{
+            margin-bottom: 20px !important;
+        }
+    }
     .textContainer{
         width: 50%;
         background-color: #F3F3F3;
         padding: 100px 55px;
-        max-height: 650px;
     }
     .ecologyName{
         font-size: 40px;

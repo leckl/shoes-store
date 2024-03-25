@@ -10,7 +10,6 @@
     import HelpBlock from './HelpBlock.vue';
     import TelegramBlock from './TelegramBlock.vue';
     import EmailBlock from './EmailBlock.vue';
-    import Footer from './Footer.vue'
     export default {
         components: {
             AddBlock,
@@ -24,7 +23,6 @@
             HelpBlock,
             TelegramBlock,
             EmailBlock,
-            Footer,
         }
     }
 </script>
@@ -40,5 +38,4 @@
     <HelpBlock></HelpBlock>
     <TelegramBlock></TelegramBlock>
     <EmailBlock></EmailBlock>
-    <Footer></Footer>
 </template>

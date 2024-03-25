@@ -15,7 +15,7 @@
                 <p class="emailBlockPhrase">Получайте первыми эксклюзивные предложения, скидки и новости о последних трендах! Подпишитесь сейчас и оставайтесь в курсе моды и выгодных возможностей!</p>
                 <form class="emailBlockInputContainer">
                     <input placeholder="E-mail" v-model="email" type="text" id="emailBlockInput">
-                    <button class="emailBlockButton">Подписаться</button>
+                    <button disabled class="emailBlockButton">Подписаться</button>
                     <!-- Добавить функционал при написании backend -->
                 </form>
             </div>
@@ -23,6 +23,11 @@
     </section>
 </template>
 <style scoped>
+    .container{
+    padding: 0px 20px;
+    max-width: 1300px;
+    margin: 0 auto;
+    }
     .emailBlock{
         background-color: #f3f3f3;
     }
@@ -30,7 +35,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 80px 0;
+        padding: 80px 20px  ;
     }
     .emailBlockPhraseContainer{
         text-align: center;
@@ -51,7 +56,7 @@
         justify-content: center;
     }
     #emailBlockInput{
-        min-width: 50%;
+        width: 50%;
         border-radius: 5px;
         border: 1px solid #123026;
         border-top-right-radius: 0;
@@ -60,12 +65,21 @@
         outline: none;
         font-size: 16px;
     }
+    @media screen and (max-width: 530px){
+        .emailBlockButton{
+            padding: 15px 5px !important;
+        }
+    }
+    @media screen and (max-width: 440px){
+        #emailBlockInput{
+            width: 70%;
+        }
+    }
     #emailBlockInput:active{
         border: 1px solid #123026;
         outline: none;
     }
     .emailBlockButton{
-        width: 30%;
         cursor: pointer;
         background-color: #123026;
         color: white;

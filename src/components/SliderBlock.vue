@@ -1,4 +1,6 @@
 <script>
+    import { vScrollLock } from '@vueuse/components'
+
     import { RouterLink } from 'vue-router';
     
     import { Swiper, SwiperSlide } from 'swiper/vue';

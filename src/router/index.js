@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Bebe from '../components/AddBlock.vue'
+import AboutUs from '../components/AboutUs.vue'
 import Bubu from '../components/MainBlock.vue'
 import Main from '../components/MainBlock.vue'
 
@@ -8,7 +8,7 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', component: Main },
-    { path: '/bebe', component: Bebe },
+    { path: '/about', component: AboutUs },
     { path: '/bubu', component: Bubu },
   ]
 })

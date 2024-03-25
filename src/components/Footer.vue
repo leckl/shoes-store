@@ -36,7 +36,7 @@
             </div>
             <ul class="footerList" v-for="(list, index) in lists" :key="index">
                 <li v-for="(point, key) in list" :key="key">
-                    {{ point }}
+                    <router-link class="footerListLink" to="/">{{ point }}</router-link>
                 </li>
             </ul>
         </div>
@@ -73,19 +73,48 @@
         font-size: 13px;
         color:rgba(255, 255, 255, 0.75)
     }
-    .footerPhrasesContainer,
-    .footerList {
+    .footerPhrasesContainer{
         flex-grow: 1;
         flex-basis: calc(25% - 50px);
+        margin-right: 100px;
+    }
+    @media screen and (max-width: 870px){
+        .footerPhrasesContainer{
+            margin-right: 30px;
+        }
+    }
+    @media screen and (max-width: 800px){
+        .footerContainer{
+            flex-direction: column;
+        }
+        .footerPhrasesContainer{
+            margin-bottom: 20px;
+        }
+        .footerList{
+            margin: 10px 0;
+        }
+
+    }
+    .footerList{
+        margin-right: 50px;
     }
     .footerList li:first-child{
         font-weight: 600;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
         font-size: 18px;
     }
     .footerList li:not(:first-child){
-        font-size: 15px;
+        padding: 5px 0;
+    }
+    .footerList:last-child li:not(:first-child){
+        text-decoration: underline;
+    }
+    .footerList li:first-child .footerListLink:first-child{
+        color: white;
+        text-decoration: none;
+    }
+    .footerList li:not(:first-child) .footerListLink:first-child{
         color: #C4CBC9;
-        margin-top: 10px;
+        text-decoration: none;
     }
 </style>

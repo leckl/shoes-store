@@ -42,6 +42,11 @@
     font-weight: 600;
     color: white;
   }
+  @media screen and (max-width: 520px){
+    .mainPhrase{
+      font-size: 30px;
+    }
+  }
   .subPhrase{
     color: #fff;
     font-size: 25px;

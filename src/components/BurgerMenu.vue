@@ -64,7 +64,7 @@ export default {
       <nav v-if="isBurgerOpen">
         <ul class="headerNav__mobile">
           <li v-for="(nav, key) in navs" :key="key">
-            <router-link :to="`${nav.url}`">{{ nav.name }}</router-link>
+            <router-link @click="toggleBurgerMenu" :to="`${nav.url}`">{{ nav.name }}</router-link>
           </li>
         </ul>
       </nav>

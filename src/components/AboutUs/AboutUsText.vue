@@ -16,7 +16,7 @@
     h2{
         font-size: 40px;
     }
-    @media screen and (max-width: 750px){
+    @media screen and (max-width: 755px){
         h2{
             font-size: 30px;
         }

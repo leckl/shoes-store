@@ -39,7 +39,7 @@ export default {
     .aboutUsAdventagesName h2{
         font-size: 40px;
     }
-    @media screen and (max-width: 750px){
+    @media screen and (max-width: 755px){
         .aboutUsAdventagesName h2{
             font-size: 30px;
         }

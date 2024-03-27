@@ -2,7 +2,7 @@
   export default {
     data() {
       return{
-        isWideScreen: window.innerWidth > 750,
+        isWideScreen: window.innerWidth > 755,
       }
     },
     created(){
@@ -10,7 +10,7 @@
     },
     methods: {
       handleResize(){
-        this.isWideScreen = window.innerWidth > 750
+        this.isWideScreen = window.innerWidth > 755
       }
     },
     beforeDestroy() {

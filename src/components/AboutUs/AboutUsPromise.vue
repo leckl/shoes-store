@@ -55,6 +55,11 @@
         font-size: 40px;
         font-weight: 600;
     }
+    @media screen and (max-width: 755px){
+      .aboutUsPromisePhraseContainer h2{
+        font-size: 30px;
+      }
+    }
     .aboutUsPromisePhraseContainer p{
         font-size: 20px;
     }

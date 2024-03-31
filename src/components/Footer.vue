@@ -4,22 +4,58 @@
             return {
                 lists: [
                     [
-                        'Магазин',
-                        'Каталог',
-                        'Скидки',
-                        'Дождь',
-                        'Любая погода',
-                        'Снег',          
+                        {
+                            name: 'Магазин',
+                            url: '/',
+                        },
+                        {
+                            name: 'Каталог',
+                            url: '/',
+                        },
+                        {
+                            name: 'Скидки',
+                            url: '/',
+                        },
+                        {
+                            name: 'Дождь',
+                            url: '/',
+                        },
+                        {
+                            name: 'Любая погода',
+                            url: '/',
+                        },
+                        {
+                            name: 'Снег',
+                            url: '/',
+                        },        
                     ],
                     [
-                        'Информация',
-                        'О нас',
-                        'Контакты',
+                        {
+                            name: 'Информация',
+                            url: '/',
+                        },
+                        {
+                            name: 'О нас',
+                            url: '/about',
+                        },
+                        {
+                            name: 'Контакты',
+                            url: '/',
+                        }, 
                     ],
                     [
-                        'Следите за нами',
-                        'YouTube',
-                        'Telegram',
+                        {
+                            name: 'Следите за нами',
+                            url: '',
+                        },
+                        {
+                            name: 'YouTube',
+                            url: '',
+                        },
+                        {
+                            name: 'Telegram',
+                            url: '',
+                        },
                     ]
                 ],
             }
@@ -36,7 +72,7 @@
             </div>
             <ul class="footerList" v-for="(list, index) in lists" :key="index">
                 <li v-for="(point, key) in list" :key="key">
-                    <router-link class="footerListLink" to="/">{{ point }}</router-link>
+                    <router-link class="footerListLink" :to="`${point.url}`">{{ point.name }}</router-link>
                 </li>
             </ul>
         </div>
@@ -112,6 +148,7 @@
     .footerList li:first-child .footerListLink:first-child{
         color: white;
         text-decoration: none;
+        pointer-events: none;
     }
     .footerList li:not(:first-child) .footerListLink:first-child{
         color: #C4CBC9;

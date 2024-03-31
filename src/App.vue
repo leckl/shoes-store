@@ -64,7 +64,7 @@
         </nav>
         <ul class="svgHeaderMenu">
           <li><img src="./assets/Serarch.svg" alt="Search"></li>
-          <li><img src="./assets/Profile.svg" alt="Profile"></li>
+          <li><router-link to="/registration"><img src="./assets/Profile.svg" alt="Profile"></router-link></li>
           <li><img src="./assets/Cart.svg" alt="Cart"></li>
         </ul>
       </div> 

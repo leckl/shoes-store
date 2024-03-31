@@ -62,7 +62,7 @@ export default {
 
     }
     .advantage h3{
-        font-size: 24px;
+        font-size: 25px;
         color: #123026;
         margin-bottom: 20px;
     }

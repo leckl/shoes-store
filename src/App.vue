@@ -14,7 +14,7 @@
         navs: [
           {
             name: 'Новинки',
-            url: '/'
+            url: '/catalog'
           },
           {
             name: 'Скидки',

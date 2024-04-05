@@ -4,6 +4,7 @@ import AboutUs from '../components/AboutUsBlock.vue'
 import Registration from '../components/Registration.vue'
 import Main from '../components/MainBlock.vue'
 import Login from '../components/Login.vue'
+import CatalogBlock from '../components/CatalogBlock.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -12,6 +13,7 @@ const router = createRouter({
     { path: '/about', component: AboutUs },
     { path: '/registration', component: Registration },
     { path: '/login', component:  Login},
+    { path: '/catalog', component: CatalogBlock },
   ],
   scrollBehavior (to, from, savedPosition){
     return { top: 0 }

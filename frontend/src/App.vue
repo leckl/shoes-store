@@ -18,15 +18,15 @@
           },
           {
             name: 'Скидки',
-            url: '/'
+            url: '/catalog'
           },
           {
             name: 'Любая погода',
-            url: '/'
+            url: '/catalog'
           },
           {
             name: 'Снег',
-            url: '/'
+            url: '/catalog'
           },
           {
             name: 'О нас',

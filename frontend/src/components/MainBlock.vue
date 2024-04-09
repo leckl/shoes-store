@@ -10,6 +10,7 @@
     import HelpBlock from './HelpBlock.vue';
     import TelegramBlock from './TelegramBlock.vue';
     import EmailBlock from './EmailBlock.vue';
+    
     export default {
         components: {
             AddBlock,

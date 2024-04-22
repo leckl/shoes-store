@@ -1,8 +1,10 @@
 <script>
-  import { RouterLink, RouterView } from 'vue-router';
+  import { RouterLink, RouterView, useRouter } from 'vue-router';
   import MainBlock from './components/MainBlock.vue';
   import BurgerMenu from './components/BurgerMenu.vue';
   import Footer from './components/Footer.vue';
+  import axios from 'axios';
+  import { useCatalogStore } from './stores/catalog';
   export default {
     components: {
       MainBlock,
@@ -33,16 +35,64 @@
             url: '/about'
           },
         ],
+        searchKeyword: '',
         isWideScreen: window.innerWidth > 990,
       }
     },
     created(){
       window.addEventListener('resize', this.handleResize)
     },
+    setup() {
+      const router = useRouter();
+      const catalogStore = useCatalogStore();
+
+      const startSearch = async () => {
+        const searchKeyword = this.searchKeyword.trim();
+
+        if (searchKeyword.length > 0) {
+          try {
+            const response = await axios.get('http://localhost:3001/catalog', {
+              params: {
+                search: searchKeyword
+              }
+            });
+
+            catalogStore.setFilteredItems(response.data);
+
+            await router.push({ name: 'Catalog' })
+          } catch (error) {
+            console.error('Ошибка при выполнении поискового запроса:', error);
+          }
+        }
+      };
+
+      return {
+        startSearch
+      };
+    },
     methods: {
       handleResize(){
         this.isWideScreen = window.innerWidth > 990
-      }
+      },
+      // startSearch() {
+      //   const catalogStore = useCatalogStore()
+      //   const searchKeyword = this.searchKeyword.trim()
+
+      //   if (searchKeyword.length > 0) {
+      //     axios.get('http://localhost:3001/catalog', {
+      //       params: {
+      //         search: searchKeyword
+      //       }
+      //     })
+      //   .then(response => {
+      //     catalogStore.setFilteredItems(response.data)
+      //   })
+      //   .catch(err => {
+      //     console.log(err)
+      //   })
+
+      //   }
+      // }
     },
     beforeDestroy() {
       window.removeEventListener('resize', this.handleResize)
@@ -63,7 +113,7 @@
           </ul>
         </nav>
         <ul class="svgHeaderMenu">
-          <li><img src="./assets/Serarch.svg" alt="Search"></li>
+          <!-- <li class="searchLine"><input v-model="searchKeyword" class="searchField" type="text"><img src="./assets/Serarch.svg" class="search" @click="startSearch" alt="Search"></li> -->
           <li><router-link to="/registration"><img src="./assets/Profile.svg" alt="Profile"></router-link></li>
           <li><img src="./assets/Cart.svg" alt="Cart"></li>
         </ul>
@@ -153,5 +203,18 @@ header{
   .svgHeaderMenu{
     right: 15px;
   }
+}
+.search{
+  cursor: pointer;
+}
+.searchLine{
+  display: flex;
+}
+.searchField{
+  border: none;
+  border-bottom: 1px solid #123026;
+}
+.searchField:focus{
+  outline: none;
 }
 </style>

@@ -59,7 +59,7 @@
     text-decoration: none;
     padding: 15px 45px;
     border: 0;
-    font-size: 22px;
+    font-size: 16px;
     border-radius: 5px;
     cursor: pointer;
   }

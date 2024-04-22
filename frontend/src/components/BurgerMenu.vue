@@ -73,42 +73,42 @@ export default {
 </template>
 <style scoped>
     body.menu-open {
-        overflow-y: hidden !important;
+      overflow-y: hidden !important;
     }
     nav{
-        width: 420px;
-        height: 100%;
-		background: #fff;
-		position: fixed;
-		top: 100px;
-		left: 0;
-		z-index: 99;
-        padding: 50px 0;
+      width: 420px;
+      height: 100%;
+      background: #fff;
+      position: fixed;
+      top: 100px;
+      left: 0;
+      z-index: 99;
+      padding: 50px 0;
     }
     .burgerMenuButton{
-        display: block;
-        width: 50px;
-        height: 50px;
-        background: white;
-        border: none;
-        position: relative;
-        z-index: 100;
-        appearance: none;
-        cursor: pointer;
-        outline: none;
+      display: block;
+      width: 50px;
+      height: 50px;
+      background: white;
+      border: none;
+      position: relative;
+      z-index: 100;
+      appearance: none;
+      cursor: pointer;
+      outline: none;
     }
     span {
-        display: block;
-        width: 20px;
-        height: 2px;
-        margin: auto;
-        background: #123026;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        transition: all .4s ease;
+      display: block;
+      width: 20px;
+      height: 2px;
+      margin: auto;
+      background: #123026;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      transition: all .4s ease;
 
         &.top {
             transform: translateY(-8px);

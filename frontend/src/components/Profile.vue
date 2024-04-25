@@ -3,6 +3,7 @@
   import GeneralData from './Profile/GeneralData.vue';
   import SecurityData from './Profile/SecurityData.vue';
   import axios from 'axios'
+  import router from '@/router';
 
   const user = ref(null)
 
@@ -33,6 +34,7 @@
     })
     .catch(err => {
       console.log(err)
+      router.push('/')
     })
   })
 
@@ -46,12 +48,20 @@
     user.value = updatedUser
     localStorage.setItem('user', JSON.stringify(updatedUser))
   }
+
+  const logOut = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    
+    router.push('/')
+  }
 </script>
 <template>
   <div class="container profileContainer">
     <div v-if="user">
       <GeneralData :user="user" v-on:updateUser="updateUser"/>
       <SecurityData />
+      <button @click="logOut" class="logOutButton">Выйти</button>
     </div>
   </div>
 </template>
@@ -60,5 +70,14 @@
     position: relative;
     padding-top: 50px;
     padding-bottom: 100px;
+  }
+  .logOutButton{
+    border-radius: 5px;
+		background-color: #E92424;
+		color: #fff;
+		padding: 15px 33px;
+		border: none;
+		font-size: 16px;
+    cursor: pointer;
   }
 </style>

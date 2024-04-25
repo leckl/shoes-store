@@ -57,9 +57,9 @@
           console.log(err)
         })
       },
-      redirectToProduct(id) {
-        this.$router.push({ name: 'Item', params: {id: id}})
-      },
+      // redirectToProduct(id) {
+      //   this.$router.push({ name: 'Item', params: {id: id}})
+      // },
     },
     created() {
       window.addEventListener('resize', this.handleResize)
@@ -78,9 +78,10 @@
           <Filter class="catalogItemCard" @apply-filters="applyFilters"/>
         </section>
         <section class="catalogGrid">
-          <CatalogItemCard @click="redirectToProduct(item.itemId)" v-for="item in filteredItems" :key="item.itemId" 
+          <CatalogItemCard  v-for="item in filteredItems" :key="item.itemId" 
+          :id="item.itemId"
           :name="item.itemName" 
-          :categorie="item.itemCategory"
+          :category="item.itemCategory"
           :price="item.itemPrice"
           :colors="item.colorsHex"/>
         </section>

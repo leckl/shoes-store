@@ -4,6 +4,7 @@
   import * as yup from 'yup'
   import EmailBlock from './EmailBlock.vue';
 import axios from 'axios';
+import router from '@/router';
 export default {
   components: {
     Form,
@@ -26,6 +27,7 @@ export default {
         const token = response.data.token
 
         localStorage.setItem('token', token)
+        router.push('/profile')
       })
       .catch(err => {
         console.log(err)

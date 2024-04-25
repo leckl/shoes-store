@@ -1,11 +1,16 @@
 <script>
+import axios from 'axios'
 export default {
     props: {
+        id: {
+            type: Number,
+            required: true
+        },
         name: {
             type: String,
             required: true,
         },
-        categorie: {
+        category: {
             type: String,
             required: true,
         },
@@ -18,14 +23,63 @@ export default {
             required: true,
         },
     },
+    data() {
+        return{
+            inWishList: false,
+        }
+    },
+    computed: {
+        favoriteIcon() {
+            return this.inWishList ? new URL(`../../assets/Catalog/toFavoriteSelected.svg`, import.meta.url).href : new URL(`../../assets/Catalog/toFavorite.svg`, import.meta.url).href
+        },
+    },
+    created() {
+        const favoriteStatus = localStorage.getItem(`favorite_${this.id}`)
+        if (favoriteStatus === 'true') {
+            this.inWishList = true
+        }
+    },
+    methods: {
+        toggleFavorite() {
+            this.inWishList = !this.inWishList
+            localStorage.setItem(`favorite_${this.id}`, this.inWishList)
+
+            this.addToWishlist()
+        },
+        redirectToProduct(id) {
+            this.$router.push({ name: 'Item', params: {id: id}})
+        },
+        addToWishlist() {
+            const token = localStorage.getItem('token')
+            if (!token) {
+                alert('Вы не авторизованы. Войдите в свою учетную запись, чтобы добавить товар в список желаемого.')
+                return
+            }
+
+            axios.post('http://localhost:3001/add-to-wishlist', {
+                itemId: this.id
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                alert('Товар успешно добавлен в список желаемого.')
+            })
+            .catch(error => {
+                console.error('Ошибка при добавлении товара в список желаемого:', error.response.data)
+                alert('Произошла ошибка при добавлении товара в список желаемого.')
+            });
+        }
+    }
 }
 </script>
     <template>
         <div class="item">
-            <img class="itemPhoto" src="../../assets/Catalog/itemPhoto.png" alt="Item photo">
-            <h3 class="itemName">{{ name }} <img class="toFavorite" src="../../assets/Catalog/toFavorite.svg" alt="Favorite"></h3>
+            <img @click="redirectToProduct(id)" class="itemPhoto" src="../../assets/Catalog/itemPhoto.png" alt="Item photo">
+            <h3 class="itemName">{{ name }} <img class="toFavorite" @click="toggleFavorite" :src="favoriteIcon" alt="Favorite"></h3>
             <!-- Добавить обработчик для избранного -->
-            <p class="itemCategorie">{{ categorie }}</p>
+            <p class="itemCategorie">{{ category }}</p>
             <p class="itemPrice">{{ price }}$</p>
             <div class="colorsContainer">
                 <div class="color" v-for="(color, id) in colors.split(' ')" :key="id" :style="{ backgroundColor: color }"></div>
@@ -69,6 +123,7 @@ export default {
     }
     .toFavorite{
         cursor: pointer;
+        z-index: 30;
     }
     .itemCategorie{
         font-weight: 300;

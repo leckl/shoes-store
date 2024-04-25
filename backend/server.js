@@ -172,7 +172,7 @@ app.post('/sing-in', (req, res) => {
       return res.status(500).send('Ошибка сервера')
     }
     if (results.length === 0) {
-      return res.send('Неправильные данные')
+      return res.status(400).send('Неправильные данные')
     }
     const user = results[0]
     bcrypt.compare(password, user.hashedPassword, (err, result) => { //Проверяем пароль
@@ -197,7 +197,7 @@ app.post('/sing-in', (req, res) => {
         res.status(200).json({ token })
       }
       else {
-        return res.send('Неправильные данные')
+        return res.status(400).send('Неправильные данные')
       }
     })
   })
@@ -220,7 +220,7 @@ app.get('/user-profile', verifyToken, (req, res) => {
 })
 
 app.put('/edit-general', (req, res) => {
-  const token = req.headers['authorization'].split(' ')[1];
+  const token = req.headers['authorization'].split(' ')[1]
   if (!token) {
     return res.status(401).send('Токен не найден')
   }
@@ -261,11 +261,173 @@ app.put('/edit-general', (req, res) => {
     con.query(query, updateValues, (err, results) => {
       if (err) {
         console.log(err)
-        return res.status(500).send('Ошибка сервера')
+        return res.send('Ошибка сервера')
       }
 
       console.log('Updated')
       res.status(200).send('Updated')
+    })
+  })
+})
+
+app.put('/change-password', verifyToken, (req, res) => {
+  const token = req.headers['authorization'].split(' ')[1]
+  if (!token) {
+    return res.send('Токен не найден')
+  }
+
+  jwt.verify(token, 'secretKey', (err, decoded) => {
+    if (err) {
+      console.log(err)
+      return res.send('Токен недействителен')
+    }
+
+    const { userId } = decoded
+    const { oldPassword, newPassword } = req.body
+
+    const getPasswordQuery = `SELECT hashedPassword FROM users WHERE userId = ?`
+
+    con.query(getPasswordQuery, [userId], (err, results) => {
+      if (err) {
+        console.log(err)
+        return res.send('Ошибка сервера')
+      }
+
+      if (results.length === 0) {
+        return res.send('Пользователь не найден')
+      }
+
+      const userHashedPassword = results[0].hashedPassword
+
+      bcrypt.compare(oldPassword, userHashedPassword, (err, result) => {
+        if (err) {
+          console.log(err)
+          return res.send('Ошибка сервера')
+        }
+
+        if (!result) {
+          return res.send('Старый пароль неверен') //Вывести ошибку на frontend
+        }
+
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(newPassword, salt, (err, hashedPassword) => {
+            if (err) {
+              console.log(err)
+              return res.send('Ошибка сервера')
+            }
+
+            const updatePasswordQuery = `UPDATE users SET hashedPassword = ? WHERE userId = ?`
+
+            con.query(updatePasswordQuery, [hashedPassword, userId], (err, results) => {
+              if (err) {
+                console.log(err)
+                return res.send('Ошибка сервера')
+              }
+
+              console.log('Пароль был изменён')
+              res.status(200).send('Пароль был изменён')
+            })
+          })
+        })
+      })
+    })
+  })
+})
+
+app.post('/add-to-wishlist', verifyToken, (req, res) => {
+  const token = req.headers['authorization'].split(' ')[1]
+
+  if (!token) {
+    return res.send('Токен не найден')
+  }
+
+  jwt.verify(token, 'secretKey', (err, decoded) => {
+    if (err) {
+      console.log(err)
+      return res.send('Токен недействителен')
+    }
+
+    const { userId } = decoded
+    const { itemId } = req.body
+
+    const getWishsQuery = `SELECT * FROM wishlist WHERE userId = ? AND itemId = ?`
+
+    con.query(getWishsQuery, [userId, itemId], (err, results) => {
+      if (results.length === 0) {
+        const addingQuery = `INSERT INTO wishlist (userId, itemId) VALUES (?, ?)`
+
+        con.query(addingQuery, [userId, itemId], (err, results) => {
+          if (err) {
+            console.log(err)
+          }
+
+          console.log('Товар добавлен в список избранного')
+        })
+      }
+      else if (results.length === 1) {
+        const deletingQuery = `DELETE FROM wishlist WHERE userId = ? AND itemId = ?`
+
+        con.query(deletingQuery, [userId, itemId], (err, results) => {
+          if (err) {
+            console.log(err)
+          }
+
+          console.log('Товар удалён из списка желаемого')
+        })
+      }
+    })
+  })
+})
+
+app.get('/show-wishlist', (req, res) => {
+  const token = req.headers['authorization'].split(' ')[1]
+
+  if (!token) {
+    return res.send('Токен не найден')
+  }
+
+  jwt.verify(token, 'secretKey', (err, decoded) => {
+    if (err) {
+      console.log(err)
+      return res.send('Токен недействителен')
+    }
+
+    const { userId } = decoded
+
+
+    const query = `SELECT 
+    i.*, 
+    c.colors, 
+    c.colorsHex, 
+    s.sizes 
+FROM 
+    wishlist w
+JOIN 
+    items i ON w.itemId = i.itemId
+LEFT JOIN 
+    (SELECT ic.itemId, GROUP_CONCAT(c.colorName SEPARATOR ' ') AS colors, GROUP_CONCAT(c.colorCode SEPARATOR ' ') AS colorsHex
+    FROM item_colors ic
+    LEFT JOIN colors c ON ic.colorId = c.colorId
+    GROUP BY ic.itemId) c ON i.itemId = c.itemId
+LEFT JOIN 
+    (SELECT isz.itemId, GROUP_CONCAT(s.size SEPARATOR ' ') AS sizes
+    FROM item_sizes isz
+    LEFT JOIN sizes s ON isz.sizeId = s.sizeId
+    GROUP BY isz.itemId) s ON i.itemId = s.itemId
+WHERE 
+    w.userId = ?`
+
+    con.query(query, [userId], (err, results) => {
+      if (err) {
+        console.log(err)
+      }
+
+      if (results.length > 0) {
+        res.status(200).json(results)
+      }
+      else {
+        return res.send('Ваш список желаемого пока пуст')
+      }
     })
   })
 })

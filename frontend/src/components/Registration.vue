@@ -1,65 +1,53 @@
 <script>
   import { RouterLink } from 'vue-router';
   import { Form, Field, ErrorMessage } from 'vee-validate';
-  import * as yup from 'yup'
+  import * as yup from 'yup';
   import EmailBlock from './EmailBlock.vue';
-export default {
-  components: {
-    Form,
-    Field,
-    ErrorMessage,
-    EmailBlock,
-  },
-  methods: {
-    onSubmit(values){
-      console.log(JSON.stringify(values, undefined, 2));
+  import axios from 'axios';
+  export default {
+    components: {
+      Form,
+      Field,
+      ErrorMessage,
+      EmailBlock,
     },
-    validateName(value){
-      if (!value) {
-        return 'Заполните поле'
+    data() {
+      return{
+        schema: yup.object().shape({
+          userName: yup.string().max(70, 'Максимальная длина 70').required('Заполните поле'),
+          userLogin: yup.string().min(4, 'Минимальная длина 4').max(50).required('Заполните поле'),
+          password: yup.string().min(5, 'Пароль должен быть не менее 5 символов').max(32, 'Пароль должен быть не более 32 символов').required('Заполните поле'),
+          passwordConfirmation: yup.string().required('Заполните поле').oneOf([yup.ref('password')], 'Пароли не совпадают')
+        }),
       }
-      const nameRegex = /^[а-яА-ЯёЁa-zA-Z]+$/g
-      if (!nameRegex.test(value)) {
-        return 'Пишите только буквы'
-      }
-      return true
     },
-    validEmail(value){
-      if (!value) {
-        return 'Заполните поле'
-      }
-      const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/g
-      if (!emailRegex.test(value)) {
-        return 'Введите верный email'
-      }
-      return true
+    methods: {
+      onSubmit(values){
+        console.log(JSON.stringify(values, undefined, 2));
+        axios.post('http://localhost:3001/sing-up', values)
+        .then(response => {
+          console.log(response)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      },
     },
-    validPassword(value){
-      if (!value) {
-        return 'Заполните поле'
-      }
-      const passRegex = /^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{6,16}$/
-      if (!passRegex.test(value)) {
-        return 'Пароль небезопасен'
-      }
-      return true
-    }
-  },
 }
 </script>
 <template>
   <section class="registr">
     <div class="registrContainer">
       <h2 class="registrName">Регистрация</h2>
-      <Form class="registrForm" @submit="onSubmit">
-        <Field placeholder="Имя" class="registrField" :rules="validateName" type="text" name="name" id="name" />
-        <ErrorMessage class="alertPhrase" name="name" />
-        <Field placeholder="Фамилия" class="registrField" :rules="validateName" type="text" name="surname" id="surname" />
-        <ErrorMessage class="alertPhrase" name="surname" />
-        <Field placeholder="Email" class="registrField" :rules="validEmail" type="email" name="email" id="email" />
-        <ErrorMessage class="alertPhrase" name="email" />
-        <Field placeholder="Пароль" class="registrField" :rules="validPassword" type="password" name="password" id="password" />
+      <Form class="registrForm" :validation-schema="schema" @submit="onSubmit">
+        <Field placeholder="Имя" class="registrField" type="text" name="userName" id="userName" />
+        <ErrorMessage class="alertPhrase" name="userName" />
+        <Field placeholder="Логин" class="registrField" type="text" name="userLogin" id="userLogin" />
+        <ErrorMessage class="alertPhrase" name="userLogin" />
+        <Field placeholder="Пароль" class="registrField" type="password" name="password" id="password" />
         <ErrorMessage class="alertPhrase" name="password" />
+        <Field placeholder="Повторите пароль" class="registrField"  type="password" name="passwordConfirmation" id="confirmPassword" />
+        <ErrorMessage class="alertPhrase" name="passwordConfirmation" />
         <button class="registrSubmit">Зарегистрироваться</button>
         <router-link class="toLogin" to="/login">Есть аккаунт? Войти</router-link>
       </Form>

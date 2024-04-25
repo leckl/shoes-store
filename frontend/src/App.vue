@@ -35,12 +35,13 @@
             url: '/about'
           },
         ],
-        searchKeyword: '',
+        isLoggenIn: false,
         isWideScreen: window.innerWidth > 990,
       }
     },
     created(){
       window.addEventListener('resize', this.handleResize)
+      this.isLoggenIn = this.checkIsLoggenIn()
     },
     setup() {
       const router = useRouter();
@@ -71,13 +72,16 @@
       };
     },
     methods: {
+      checkIsLoggenIn() {
+        const token = localStorage.getItem('token')
+        return token !== null
+      },
       handleResize(){
         this.isWideScreen = window.innerWidth > 990
       },
       // startSearch() {
       //   const catalogStore = useCatalogStore()
       //   const searchKeyword = this.searchKeyword.trim()
-
       //   if (searchKeyword.length > 0) {
       //     axios.get('http://localhost:3001/catalog', {
       //       params: {
@@ -114,7 +118,8 @@
         </nav>
         <ul class="svgHeaderMenu">
           <!-- <li class="searchLine"><input v-model="searchKeyword" class="searchField" type="text"><img src="./assets/Serarch.svg" class="search" @click="startSearch" alt="Search"></li> -->
-          <li><router-link to="/registration"><img src="./assets/Profile.svg" alt="Profile"></router-link></li>
+          <li v-if="!isLoggenIn" ><router-link to="/registration"><img src="./assets/Profile.svg" alt="Profile"></router-link></li>
+          <li v-if="isLoggenIn"><router-link to="/profile"><img src="./assets/Profile.svg" alt="Profile"></router-link></li>
           <li><img src="./assets/Cart.svg" alt="Cart"></li>
         </ul>
       </div> 

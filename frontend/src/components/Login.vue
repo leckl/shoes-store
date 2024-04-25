@@ -3,6 +3,7 @@
   import { Form, Field, ErrorMessage } from 'vee-validate';
   import * as yup from 'yup'
   import EmailBlock from './EmailBlock.vue';
+import axios from 'axios';
 export default {
   components: {
     Form,
@@ -10,30 +11,26 @@ export default {
     ErrorMessage,
     EmailBlock,
   },
+  data() {
+    return{
+      schema: yup.object().shape({
+        userLogin: yup.string().min(4, 'Минимальная длина 4').max(50).required('Заполните поле'),
+        password: yup.string().min(5, 'Пароль должен быть не менее 5 символов').max(32, 'Пароль должен быть не более 32 символов').required('Заполните поле'),
+      })
+    }
+  },
   methods: {
     onSubmit(values){
-      console.log(JSON.stringify(values, undefined, 2));
+      axios.post('http://localhost:3001/sing-in', values)
+      .then(response => {
+        const token = response.data.token
+
+        localStorage.setItem('token', token)
+      })
+      .catch(err => {
+        console.log(err)
+      })
     },
-    validEmail(value){
-      if (!value) {
-        return 'Заполните поле'
-      }
-      const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/g
-      if (!emailRegex.test(value)) {
-        return 'Введите верный email'
-      }
-      return true
-    },
-    validPassword(value){
-      if (!value) {
-        return 'Заполните поле'
-      }
-      const passRegex = /^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{6,16}$/
-      if (!passRegex.test(value)) {
-        return 'Пароль небезопасен'
-      }
-      return true
-    }
   },
 }
 </script>
@@ -41,12 +38,11 @@ export default {
   <section class="login">
     <div class="loginContainer">
       <h2 class="loginName">Вход</h2>
-      <Form class="loginForm" @submit="onSubmit">
-        <Field placeholder="Email" class="loginField" :rules="validEmail" type="email" name="email" id="email" />
-        <ErrorMessage class="alertPhrase" name="email" />
-        <Field placeholder="Пароль" class="loginField" :rules="validPassword" type="password" name="password" id="password" />
+      <Form class="loginForm" :validation-schema="schema" @submit="onSubmit">
+        <Field placeholder="Логин" class="loginField" type="text" name="userLogin" id="userLogin" />
+        <ErrorMessage class="alertPhrase" name="userLogin" />
+        <Field placeholder="Пароль" class="loginField" type="password" name="password" id="password" />
         <ErrorMessage class="alertPhrase" name="password" />
-        <!-- ToDo: После подключения backend сделать проверку на правильность данных для входа -->
         <button class="loginSubmit">Войти</button>
         <router-link class="toRegistr" to="/registration">Зарегистрироваться</router-link>
       </Form>

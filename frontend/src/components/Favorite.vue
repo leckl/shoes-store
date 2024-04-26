@@ -4,8 +4,6 @@
   import axios from 'axios'
 
   let wishlistItems = reactive([])
-  
-  let isWishlistEmpty = false
 
   const displayWishs = () => {
     const token = localStorage.getItem('token')
@@ -23,8 +21,6 @@
           wishlistItems.push(item)
         })
       }
-
-      isWishlistEmpty = wishlistItems.length === 0
     })
     .catch(err => {
       console.log(err)

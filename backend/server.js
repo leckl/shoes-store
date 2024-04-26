@@ -572,6 +572,55 @@ app.put('/decrease-quantity', verifyToken, (req, res) => {
   })
 })
 
+app.get('/get-cart', verifyToken, (req, res) => {
+  const token = req.headers['authorization'].split(' ')[1]
+
+  if (!token) {
+    return res.send('Токен не найден')
+  }
+
+  jwt.verify(token, 'secretKey', (err, decoded) => {
+    if (err) {
+      console.log(err)
+    }
+
+    const { userId } = decoded
+
+    const query = `SELECT 
+    i.*, 
+    c.colors, 
+    c.colorsHex, 
+    s.sizes 
+    FROM 
+    cart cr
+    JOIN items i ON cr.itemId = i.itemId
+    LEFT JOIN 
+    (SELECT ic.itemId, GROUP_CONCAT(c.colorName SEPARATOR ' ') AS colors, GROUP_CONCAT(c.colorCode SEPARATOR ' ') AS colorsHex
+      FROM item_colors ic
+      LEFT JOIN colors c ON ic.colorId = c.colorId
+      GROUP BY ic.itemId) c ON i.itemId = c.itemId
+    LEFT JOIN 
+      (SELECT isz.itemId, GROUP_CONCAT(s.size SEPARATOR ' ') AS sizes
+      FROM item_sizes isz
+      LEFT JOIN sizes s ON isz.sizeId = s.sizeId
+      GROUP BY isz.itemId) s ON i.itemId = s.itemId
+    WHERE cr.userId = ?`
+
+    con.query(query, [userId], (err, results) => {
+      if (err) {
+        console.log(err)
+      }
+
+      if (results.length > 0) {
+        res.status(200).json(results)
+      }
+      else {
+        return res.send('Ваша корзина пуста')
+      }
+    })
+  })
+})
+
 app.get('/protected-route', verifyToken, (req, res) => {
   const token = req.headers['authorization']
   if (!token) {

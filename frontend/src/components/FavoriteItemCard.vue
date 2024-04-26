@@ -1,29 +1,25 @@
 <script setup>
 import axios from 'axios';
-
     
   const props = defineProps({
     id: {
-      type: Number,
-      required: true
+      type: Number, 
     },
     name: {
       type: String,
-      required: true,
     },
     category: {
       type: String,
-      required: true,
     },
     price: {
       type: Number,
-      required: true,
     },
     colors: {
       type: String,
-      required: true,
     },
   })
+
+  const emit = defineEmits(['item-delete'])
 
   const deleteFromWishlist = () => {
     const token = localStorage.getItem('token')
@@ -32,10 +28,8 @@ import axios from 'axios';
       return
     }
 
-    axios.post('http://localhost:3001/add-to-wishlist',
-    {
-      itemId: id
-    },
+    axios.post('http://localhost:3001/delete-from-wishlist',
+    { itemId: props.id },
     {
       headers: {
         Authorization: `Bearer ${token}`
@@ -43,8 +37,12 @@ import axios from 'axios';
     })
     .then(response => {
       console.log('Товар удалён из списка')
+      localStorage.setItem(`favorite_${props.id}`, false)
+      emit('item-deleted')
     })
-
+    .catch(err => {
+      console.log(err)
+    })
   }
 </script>
 <template>
@@ -54,7 +52,7 @@ import axios from 'axios';
     <p class="itemCategorie">{{ category }}</p>
     <p class="itemPrice">{{ price }}$</p>
     <div class="colorsContainer">
-        <div class="color" v-for="(color, id) in colors.split(' ')" :key="id" :style="{ backgroundColor: color }"></div>
+      <div class="color" v-for="(color, id) in colors.split(' ')" :key="id" :style="{ backgroundColor: color }"></div>
     </div>
     <button class="itemButton">В корзину</button>
   </div>

@@ -14,10 +14,10 @@ app.use(express.json())
 const port = 3001
 
 const con = mysql.createConnection({
-	host: 'web.edu',
-	user: '21046',
-	database: '21046_atlas-shoes',
-	password: 'webbcq',
+	host: 'localhost',
+	user: 'root',
+	database: 'atlas-shoes',
+	password: '',
 })
 
 con.connect(err => {
@@ -426,6 +426,148 @@ app.get('/show-wishlist', (req, res) => {
       else {
         return res.send('Ваш список желаемого пока пуст')
       }
+    })
+  })
+})
+
+app.post('/delete-from-wishlist', (req, res) => {
+  const token = req.headers['authorization'].split(' ')[1]
+
+  if (!token) {
+    return res.send('Токен не найден')
+  }
+
+  jwt.verify(token, 'secretKey', (err, decoded) => {
+    if (err) {
+      console.log(err)
+      return res.send('Токен недействителен')
+    }
+
+    const { userId } = decoded
+    const { itemId } = req.body
+
+    const deleteQuery = `DELETE FROM wishlist WHERE userId = ? AND itemId = ?`
+
+    con.query(deleteQuery, [userId, itemId], (err, resulst) => {
+      if (err) {
+        console.log(err)
+      }
+
+      console.log('Товар удалён из избранного')
+
+      const selectQuery = `SELECT * FROM wishlist WHERE userId = ?`
+
+      con.query(selectQuery, [userId], (err, rows) => {
+        if (err) {
+          console.log(err)
+          return res.status(500).send('Ошибка сервера')
+        }
+        console.log('Обновленный список избранного:', rows)
+        res.send(rows)
+      })
+    })
+  })
+})
+
+app.post('/add-to-cart', verifyToken, (req, res) => {
+  const token = req.headers['authorization'].split(' ')[1]
+
+  if (!token) {
+    return res.send('Токен не найден')
+  }
+
+  jwt.verify(token, 'secretKey', (err, decoded) => {
+    if (err) {
+      console.log(err)
+    }
+
+    const { userId } = decoded
+    const { itemId } = req.body
+
+    const checkQuantityQuery = `SELECT * FROM cart WHERE userId = ? AND itemId = ?`
+
+    con.query(checkQuantityQuery, [userId, itemId], (err, results) => {
+      if (err) {
+        console.log(err)
+      }
+
+      if (results.length === 0) {
+        const query = `INSERT INTO cart (userId, itemId, quantity) VALUES (?, ?, 1)`
+
+        con.query(query, [userId, itemId], (err, results) => {
+          if (err) {
+            console.log(err)
+          }
+
+        console.log('Добавлено в корзину')
+        })
+      }
+
+      else {
+        const query = `UPDATE cart SET quantity = quantity + 1 WHERE userId = ? AND itemId = ?`
+
+        con.query(query, [userId, itemId], (err, results) => {
+          if (err) {
+            console.log(err)
+          }
+
+          console.log('Товар был прибавлен')
+        })
+      }
+    })
+  })
+})
+
+app.put('/increase-quantity', verifyToken, (req, res) => {
+  const token = req.headers['authorization'].split(' ')[1]
+
+  if (!token) {
+    return res.send('Токен не найден')
+  }
+
+  jwt.verify(token, 'secretKey', (err, decoded) => {
+    if (err) {
+      console.log(err)
+    }
+
+    const { userId } = decoded
+    const { itemId } = req.body
+
+    const query = `UPDATE cart SET quantity = quantity + 1 WHERE userId = ? AND itemId = ?`
+
+    con.query(query, [userId, itemId], (err, results) => {
+      if (err) {
+        console.log(err)
+      }
+
+      console.log('increase')
+    })
+  })
+})
+
+app.put('/decrease-quantity', verifyToken, (req, res) => {
+  const token = req.headers['authorization'].split(' ')[1]
+
+  if (!token) {
+    return res.send('Токен не найден')
+  }
+
+  jwt.verify(token, 'secretKey', (err, decoded) => {
+    if (err) {
+      console.log(err)
+    }
+
+    const { userId } = decoded
+    const { itemId } = req.body
+
+    const query = `UPDATE cart SET quantity = quantity - 1 WHERE userId = ? AND itemId = ?`
+
+    con.query(query, [userId, itemId], (err, results) => {
+      if (err) {
+        console.log(err)
+      }
+
+      console.log('decrease')
     })
   })
 })

@@ -52,7 +52,7 @@ export default {
         addToWishlist() {
             const token = localStorage.getItem('token')
             if (!token) {
-                alert('Вы не авторизованы. Войдите в свою учетную запись, чтобы добавить товар в список желаемого.')
+                alert('Вы не авторизованы. Войдите в свою учетную запись, чтобы добавить товар в список желаемого')
                 return
             }
 
@@ -64,12 +64,34 @@ export default {
                 }
             })
             .then(response => {
-                alert('Товар успешно добавлен в список желаемого.')
+                console.log('Товар успешно добавлен в список желаемого')
             })
             .catch(error => {
-                console.error('Ошибка при добавлении товара в список желаемого:', error.response.data)
-                alert('Произошла ошибка при добавлении товара в список желаемого.')
+                console.log(error)
+                alert('Произошла ошибка при добавлении товара в список желаемого')
             });
+        },
+        addToCart() {
+            const token = localStorage.getItem('token')
+            if (!token) {
+                alert('Вы не авторизованы. Войдите в свою учетную запись, чтобы добавить товар в список желаемого')
+                return
+            }
+
+            axios.post('http://localhost:3001/add-to-cart', {
+                itemId: this.id
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                console.log('Товар добавлен в корзину')
+            })
+            .catch(error => {
+                console.log(error)
+                alert('Произошла ошибка при добавлении товара в корзину')
+            })
         }
     }
 }
@@ -78,13 +100,12 @@ export default {
         <div class="item">
             <img @click="redirectToProduct(id)" class="itemPhoto" src="../../assets/Catalog/itemPhoto.png" alt="Item photo">
             <h3 class="itemName">{{ name }} <img class="toFavorite" @click="toggleFavorite" :src="favoriteIcon" alt="Favorite"></h3>
-            <!-- Добавить обработчик для избранного -->
             <p class="itemCategorie">{{ category }}</p>
             <p class="itemPrice">{{ price }}$</p>
             <div class="colorsContainer">
                 <div class="color" v-for="(color, id) in colors.split(' ')" :key="id" :style="{ backgroundColor: color }"></div>
             </div>
-            <button class="itemButton">В корзину</button>
+            <button @click="addToCart" class="itemButton">В корзину</button>
          </div>
     </template>
 <style>

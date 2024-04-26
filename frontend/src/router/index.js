@@ -8,6 +8,7 @@ import CatalogBlock from '../components/CatalogBlock.vue'
 import ItemPage from '@/components/ItemPage.vue'
 import Profile from '../components/Profile.vue'
 import Favorite from '@/components/Favorite.vue'
+import Cart from '@/components/Cart.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -20,6 +21,7 @@ const router = createRouter({
     { name: 'Item', path: '/product/:id', component: ItemPage },
     { name: 'Profille', path: '/profile', component: Profile },
     { name: 'Favorite', path: '/favorite', component: Favorite },
+    { name: 'Cart', path: '/cart', component: Cart },
   ],
   scrollBehavior (to, from, savedPosition){
     return { top: 0 }

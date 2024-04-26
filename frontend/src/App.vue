@@ -117,7 +117,7 @@
           <li v-if="!isLoggenIn" ><router-link to="/registration"><img src="./assets/Profile.svg" alt="Profile"></router-link></li>
           <li v-if="isLoggenIn"><router-link to="/profile"><img src="./assets/Profile.svg" alt="Profile"></router-link></li>
           <li><router-link to="/favorite"><img src="./assets/Catalog/toFavorite.svg" alt="Favorite"></router-link></li>
-          <li><img src="./assets/Cart.svg" alt="Cart"></li>
+          <li><router-link to="/cart"><img src="./assets/Cart.svg" alt="Cart"></router-link></li>
         </ul>
       </div> 
   </header>

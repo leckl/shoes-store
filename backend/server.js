@@ -14,10 +14,10 @@ app.use(express.json())
 const port = 3001
 
 const con = mysql.createConnection({
-	host: 'localhost',
-	user: 'root',
-	database: 'atlas-shoes',
-	password: '',
+	host: 'web.edu',
+	user: '21046',
+	database: '21046_atlas-shoes',
+	password: 'webbcq',
 })
 
 con.connect(err => {

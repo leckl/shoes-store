@@ -4,20 +4,16 @@ export default {
     return {
         navs: [
           {
-            name: 'Новинки',
-            url: '/'
+            name: 'Каталог',
+            url: '/catalog'
           },
           {
             name: 'Скидки',
-            url: '/'
+            url: '/catalog'
           },
           {
-            name: 'Любая погода',
-            url: '/'
-          },
-          {
-            name: 'Снег',
-            url: '/'
+            name: 'Новинки',
+            url: '/catalog'
           },
           {
             name: 'О нас',

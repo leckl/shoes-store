@@ -111,7 +111,7 @@ export default {
                 </label>
                 Функционал отменён -->
 
-                <hr>
+                <hr v-if="key !== 0">
                 <button @click="applyFilters" v-if="key == filters.length - 1" class="filterSubmit">Готово</button>
             </div>
 
@@ -122,11 +122,11 @@ export default {
                     <img src="../../assets/Catalog/filtersIcon.svg" alt=""> <label>Фильтры</label>
                 </div>
 
-                <div v-if="isFiltersOpen" class="filters_mobile">
-                    <div  v-for="(filter, key) in filters" :key="key" class="filterPoint">
-                        <div v-if="key == 0" class="filterPoint">
-                    <input class="searchFiled" type="text" :placeholder="filter.localisationName" v-model="selectedFilters[key]">
-                </div>
+                <div v-if="isFiltersOpen" class="filters__mobile">
+                    <div  v-for="(filter, key) in filters" :key="key" class="filterPoint__mobile">
+                        <div v-if="key == 0" class="filterPoint__mobile">
+                            <input class="searchFiled" type="text" :placeholder="filter.localisationName" v-model="selectedFilters[key]">
+                        </div>
 
                 <div v-if="key > 0" @click="toggleFilter(key)" class="filterNameContainer">
                     <p class="filterName">{{ filter.localisationName }}</p>
@@ -157,7 +157,7 @@ export default {
                 </label>
                 Функционал отменён -->
 
-                <hr>
+                <hr v-if="key !== 0">
                 <button @click="applyFilters, toggleFilters()" v-if="key == filters.length - 1" class="filterSubmit">Готово</button>
                 </div>
                 </div>
@@ -169,6 +169,8 @@ export default {
 <style>
     .searchFiled{
         width: 100%;
+        border: 1px solid #123026;
+        padding: 5px;
     }
     .searchFiled:focus{
         outline: none;
@@ -176,33 +178,41 @@ export default {
     body.menu-open {
       overflow-y: hidden !important;
     }
-    .filters_mobile{
-        text-align: right;
+    .filters__mobile{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
         position: fixed;
+        gap: 20px;
         top: 0px;
         right: 0px;
-        width: 420px;
-        height: 100%;
+        padding-top: 170px;
+        z-index: 30;
         background-color: #fff;
-        z-index: 50;
-        padding: 50px 0;
+        height: 100%;
+        width: 420px;
+        text-align: right;
     }
     .filter{
         display: inline-block;
     }
     .fliterContainer{
         display: flex;
+        gap: 20px;
         flex-direction: column;
     }
     .filterName{
         display: inline;
     }
     hr{
-        margin-bottom: 20px;
+        /* margin-bottom: 20px; */
     }
     .filterPoint{
         width: 130px;
-        
+    }
+    .filterPoint__mobile{
+        width: 170px;
+        padding-right: 20px;
     }
     .filterImage{
         float: right;
@@ -228,6 +238,7 @@ export default {
         border: none;
         color: white;
         border-radius: 5px;
+        margin-top: 15px;
         padding: 5px 0;
     }
     .filterCheckbox{

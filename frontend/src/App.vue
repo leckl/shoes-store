@@ -15,7 +15,7 @@
       return {
         navs: [
           {
-            name: 'Новинки',
+            name: 'Каталог',
             url: '/catalog'
           },
           {
@@ -23,11 +23,7 @@
             url: '/catalog'
           },
           {
-            name: 'Любая погода',
-            url: '/catalog'
-          },
-          {
-            name: 'Снег',
+            name: 'Новинки',
             url: '/catalog'
           },
           {
@@ -143,6 +139,10 @@ body.menu-open {
   font-family: Condiment;
   src: url('./assets/Condiment-Regular.ttf');
 }
+@font-face {
+  font-family: Roboto;
+  src: url('./assets/Roboto-Regular.ttf');
+}
 body{
   overflow-x: hidden;
 }
@@ -155,7 +155,7 @@ body{
 *{
   margin: 0;
   padding: 0;
-  font-family: Roboto;
+  font-family: Roboto, 'sans-serif';
   box-sizing: border-box;
 }
 .container{
@@ -198,7 +198,7 @@ header{
 }
 .svgHeaderMenu{
   position: absolute;
-  right: 65px;
+  right: 20px;
   display: flex;
   flex-direction: row;
   align-items: center;

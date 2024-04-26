@@ -56,6 +56,7 @@
                 ],
                 isWideScreen: window.innerWidth > 990,
                 cols: 2,
+                sliderNum: 1,
             }
         },
         created(){
@@ -64,7 +65,17 @@
         methods: {
             handleResize(){
                 this.isWideScreen = window.innerWidth > 990
-            }
+            },
+            onNextSlide() {
+                if (this.sliderNum < 3) {
+                    this.sliderNum++
+                }
+            },
+            onPrevSlide() {
+                if (this.sliderNum > 1) {
+                    this.sliderNum--
+                }
+            },
         },
         beforeDestroy() {
             window.removeEventListener('resize', this.handleResize)
@@ -109,9 +120,9 @@
                     </router-link> 
                 </swiper-slide>
                 <div class="sliderButtons">
-                    <img src="../assets/landingImage/Left.svg" class="swiperButtonPrev">
-                    <span>1/3</span>
-                    <img src="../assets/landingImage/Right.svg" class="swiperButtonNext">
+                    <img src="../assets/landingImage/Left.svg" @click="onPrevSlide" class="swiperButtonPrev">
+                    <span>{{sliderNum}}/3</span>
+                    <img src="../assets/landingImage/Right.svg" @click="onNextSlide" class="swiperButtonNext">
                 </div>
                 <div class="buttonCatalogContainer">
                     <router-link class="sliderButtonCatalog" to="/">Каталог</router-link>

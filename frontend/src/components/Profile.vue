@@ -1,11 +1,12 @@
 <script setup>
-  import { onMounted, ref } from 'vue';
+  import { onMounted, reactive, ref } from 'vue';
   import GeneralData from './Profile/GeneralData.vue';
   import SecurityData from './Profile/SecurityData.vue';
+  import AddProduct from './AddProduct.vue'
   import axios from 'axios'
   import router from '@/router';
 
-  const user = ref(null)
+  let user = reactive([])
 
   onMounted(() => {
     const token = localStorage.getItem('token')
@@ -15,12 +16,12 @@
       return
     }
 
-    const storedUser = localStorage.getItem('user')
 
-    if (storedUser) {
-      user.value = JSON.parse(storedUser)
-      return
-    }
+
+    // if (storedUser) {
+    //   user.value = JSON.parse(storedUser)
+    //   return
+    // }
     
     axios.get('http://localhost:3001/user-profile', {
       headers: {
@@ -28,9 +29,10 @@
       }
     })
     .then(response => {
-      user.value = response.data
+      response.data.forEach(UserDetail => {
+        user.push(UserDetail)
+      })
       localStorage.setItem('user', JSON.stringify(response.data))
-      console.log(response.data)
     })
     .catch(err => {
       console.log(err)
@@ -45,7 +47,7 @@
         updatedUser[key] = newUserData[key]
       }
     }
-    user.value = updatedUser
+    // user.value = updatedUser
     localStorage.setItem('user', JSON.stringify(updatedUser))
   }
 
@@ -58,9 +60,14 @@
 </script>
 <template>
   <div class="container profileContainer">
-    <div v-if="user">
-      <GeneralData :user="user" v-on:updateUser="updateUser"/>
-      <SecurityData />
+    <div v-for="userDetail in user" v-if="user">
+      <div v-if="userDetail.role === 'user'" class="userInfo">
+        <GeneralData :user="user" v-on:updateUser="updateUser"/>
+        <SecurityData />
+      </div>
+      <div v-if="userDetail.role === 'admin'" class="adminInfo">
+        <AddProduct />
+      </div>
       <button @click="logOut" class="logOutButton">Выйти</button>
     </div>
   </div>

@@ -71,7 +71,9 @@ import * as yup from 'yup'
 			</label>
 			<label class="dataFieldContainer">
 				<p class="dataName">Email</p>
-				<Field class="dataField" :placeholder="`${user && user.userEmail ? user.userEmail : 'Email'}`" v-model="values.userEmail" name="userEmail" id="userEmail" type="text" />
+				<Field class="dataField" v-model="values.userEmail" name="userEmail" id="userEmail" type="text"
+				:placeholder="`${user && user.userEmail ? user.userEmail : 'Email'}`"
+				 />
 				<ErrorMessage class="alertPhrase" name="userEmail" />
 			</label>
 		</Form>

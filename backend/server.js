@@ -14,10 +14,10 @@ app.use(express.json())
 const port = 3001
 
 const con = mysql.createConnection({
-	host: 'localhost',
-	user: 'root',
-	database: 'atlas-shoes',
-	password: '',
+	host: 'web.edu',
+	user: '21046',
+	database: '21046_atlas-shoes',
+	password: 'webbcq',
 })
 
 con.connect(err => {
@@ -191,7 +191,7 @@ app.post('/sing-in', (req, res) => {
             role: user.role
           },
           'secretKey',
-          { expiresIn: '6h' }
+          { expiresIn: '48h' }
         )
 
         res.status(200).json({ token })
@@ -214,8 +214,21 @@ app.get('/user-profile', verifyToken, (req, res) => {
       return res.status(401).send('Недействительный токен')
     }
 
-    const { userId, userName, userLogin, role } = decoded
-    res.status(200).json({ userId, userName, userLogin, role })
+    const { userId } = decoded
+
+    const query = `SELECT userName, userLogin, role, userEmail FROM users WHERE userId = ?`
+
+    con.query(query, [userId], (err, results) => {
+      if (err) {
+        console.log(err)
+      }
+
+      console.log(results)
+      res.send(results)
+    })
+
+    // const {userName, userLogin, role } = decoded
+    // res.status(200).json({ userId, userName, userLogin, role })
   })
 })
 

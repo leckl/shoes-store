@@ -3,8 +3,8 @@
   import { Form, Field, ErrorMessage } from 'vee-validate';
   import * as yup from 'yup'
   import EmailBlock from './EmailBlock.vue';
-import axios from 'axios';
-import router from '@/router';
+  import axios from 'axios';
+  import router from '@/router';
 export default {
   components: {
     Form,

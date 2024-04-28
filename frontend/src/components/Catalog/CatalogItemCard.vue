@@ -25,7 +25,7 @@ export default {
     },
     data() {
         return{
-            inWishList: false,
+            inWishList: false
         }
     },
     computed: {
@@ -38,6 +38,9 @@ export default {
         if (favoriteStatus === 'true') {
             this.inWishList = true
         }
+    },
+    mounted() {
+
     },
     methods: {
         toggleFavorite() {
@@ -92,7 +95,7 @@ export default {
                 console.log(error)
                 alert('Произошла ошибка при добавлении товара в корзину')
             })
-        }
+        },
     }
 }
 </script>
@@ -101,10 +104,10 @@ export default {
             <img @click="redirectToProduct(id)" class="itemPhoto" src="../../assets/Catalog/itemPhoto.png" alt="Item photo">
             <h3 class="itemName">{{ name }} <img class="toFavorite" @click="toggleFavorite" :src="favoriteIcon" alt="Favorite"></h3>
             <p class="itemCategorie">{{ category }}</p>
-            <p class="itemPrice">{{ price }}$</p>
             <div class="colorsContainer">
                 <div class="color" v-for="(color, id) in colors.split(' ')" :key="id" :style="{ backgroundColor: color }"></div>
             </div>
+            <p class="itemPrice">{{ price }}$</p>
             <button @click="addToCart" class="itemButton">В корзину</button>
          </div>
     </template>
@@ -148,16 +151,18 @@ export default {
     }
     .itemCategorie{
         font-weight: 300;
+        padding-bottom: 4px;
     }
     .itemPrice{
-        font-weight: 500;
-        padding: 4px 0;
+        font-size: 18px;
+        font-weight: 600;
+        padding-bottom: 15px;
     }
     .colorsContainer{
         display: flex;
         flex-wrap: wrap;
         gap: 5px;
-        padding-bottom: 15px;
+        padding-bottom: 4px;
         width: 100%;
     }
     .color{

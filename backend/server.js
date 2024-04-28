@@ -14,10 +14,10 @@ app.use(express.json())
 const port = 3001
 
 const con = mysql.createConnection({
-	host: 'web.edu',
-	user: '21046',
-	database: '21046_atlas-shoes',
-	password: 'webbcq',
+	host: 'localhost',
+	user: 'root',
+	database: 'atlas-shoes',
+	password: '',
 })
 
 con.connect(err => {
@@ -546,9 +546,9 @@ app.put('/increase-quantity', verifyToken, (req, res) => {
     const { userId } = decoded
     const { itemId } = req.body
 
-    const query = `UPDATE cart SET quantity = quantity + 1 WHERE userId = ? AND itemId = ?`
+    const increaseQuery = `UPDATE cart SET quantity = quantity + 1 WHERE userId = ? AND itemId = ?`
 
-    con.query(query, [userId, itemId], (err, results) => {
+    con.query(increaseQuery, [userId, itemId], (err, results) => {
       if (err) {
         console.log(err)
       }
@@ -603,7 +603,8 @@ app.get('/get-cart', verifyToken, (req, res) => {
     i.*, 
     c.colors, 
     c.colorsHex, 
-    s.sizes 
+    s.sizes,
+    quantity
     FROM 
     cart cr
     JOIN items i ON cr.itemId = i.itemId
@@ -634,6 +635,54 @@ app.get('/get-cart', verifyToken, (req, res) => {
   })
 })
 
+app.get('/is-admin', verifyToken, (req, res) => {
+  const token = req.headers['authorization'].split(' ')[1];
+  if (!token) {
+    return res.status(401).send('Токен не найден')
+  }
+  jwt.verify(token, 'secretKey', (err, decoded) => {
+    if (err) {
+      console.log(err)
+      return res.status(401).send('Недействительный токен')
+    }
+
+    const { userId } = decoded
+
+    const query = `SELECT role FROM users WHERE userId = ?`
+
+    con.query(query, [userId], (err, results) => {
+      if (err) {
+        console.log(err)
+      }
+
+      console.log(results)
+      res.json(results)
+    })
+  })
+})
+
+app.delete('/delete-item', (req, res) => {
+  const itemId = req.body
+  const deleteQueries = [
+    `DELETE FROM item_colors WHERE itemId = ?`,
+    `DELETE FROM item_sizes WHERE itemId = ?`,
+    `DELETE FROM wishlist WHERE itemId = ?`,
+    `DELETE FROM cart WHERE itemId = ?`,
+    `DELETE FROM items WHERE itemId = ?`
+  ];
+
+  deleteQueries.forEach(query => {
+    con.query(query, [itemId], (err, results) => {
+      if (err) {
+        con.rollback(() => {
+          console.log(err)
+          return res.status(500).send('Ошибка сервера')
+        })
+      }
+    })
+  })
+})
+
 app.get('/protected-route', verifyToken, (req, res) => {
   const token = req.headers['authorization']
   if (!token) {
@@ -649,7 +698,6 @@ app.get('/protected-route', verifyToken, (req, res) => {
     res.send('Доступ к защищенному маршруту разрешен')
   })
 });
-
 
 function verifyToken(req, res, next) {
   const token = req.headers['authorization']

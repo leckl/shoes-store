@@ -11,12 +11,15 @@ const itemId = route.params.id
 const item = ref({})
 const imgs = [1, 2, 3, 4]
 const images = ref([])
+let role = ref('')
+let isAdmin = ref(false)
 let isWideScreen = ref(window.innerWidth > 750)
 let modules = [Navigation]
 
 onMounted(() => {
   fetchItem()
   window.addEventListener('resize', handleResize)
+  checkIsAdmin()
 })
 
 onBeforeUnmount(() => {
@@ -31,10 +34,66 @@ const fetchItem = async () => {
   axios.get(`http://localhost:3001/item/${itemId}`)
   .then(response => {
     item.value = response.data
+    console.log(item.value[0].itemId)
     loadImages()
   })
   .catch(error => {
     console.error(error)
+  })
+}
+
+const checkIsAdmin = () => {
+  const token = localStorage.getItem('token')
+  if (!token) {
+      alert('Вы не авторизованы. Войдите в свою учетную запись, чтобы добавить товар в список желаемого')
+      return
+  }
+
+  axios.get('http://localhost:3001/is-admin', {
+      headers: {
+          Authorization: `Bearer ${token}`
+      }
+  })
+  .then(response => {
+      console.log(response.data[0].role)
+      role.value = response.data[0].role
+      console.log(role.value)
+      isAdmin.value = role.value === 'admin'
+  })
+  .catch(error => {
+      console.log(error)
+  })
+}
+
+const addToCart = () => {
+  const token = localStorage.getItem('token')
+  if (!token) {
+      alert('Вы не авторизованы. Войдите в свою учетную запись, чтобы добавить товар в список желаемого')
+      return
+  }
+
+  axios.post('http://localhost:3001/add-to-cart', {
+      itemId: item.value[0].itemId
+  }, {
+      headers: {
+          Authorization: `Bearer ${token}`
+      }
+  })
+  .then(response => {
+      console.log('Товар добавлен в корзину')
+  })
+  .catch(error => {
+      console.log(error)
+      alert('Произошла ошибка при добавлении товара в корзину')
+  })
+}
+
+const deleteItem = () => {
+  axios.post('http://localhost:3001/delete-item',{
+    itemId: item.value[0].itemId
+  })
+  .then(response => {
+    console.log('Товар был удалён')
   })
 }
 
@@ -88,8 +147,10 @@ const loadImages = () => {
           <p class="productSetting">Сезон: {{ itemInfo.itemSeason }}</p>
         </div>
         <div class="productButtonsContainer">
-          <button class="addToCartButton">Добавить в корзину</button>
-          <button class="buyNowButton">Купить сейчас</button>
+          <button v-if="!isAdmin" @click="addToCart" class="addToCartButton">Добавить в корзину</button>
+          <!-- <button v-if="!isAdmin" class="buyNowButton">Купить сейчас</button> -->
+          <button v-if="isAdmin" class="buyNowButton">Изменить товар</button>
+          <button v-if="isAdmin" @click="deleteItem" class="logOutButton">Удалить товар</button>
         </div>
       </div>
     </div>
@@ -145,8 +206,8 @@ const loadImages = () => {
         <p class="productSetting">Сезон: {{ itemInfo.itemSeason }}</p>
       </div>
       <div class="productButtonsContainer">
-        <button class="addToCartButton">Добавить в корзину</button>
-        <button class="buyNowButton">Купить сейчас</button>
+        <button class="buyNowButton " @click="addToCart">Добавить в корзину</button>
+        <!-- <button class="buyNowButton">Купить сейчас</button> -->
       </div>
     </div>
     <EmailBlock/>
@@ -265,6 +326,7 @@ const loadImages = () => {
     font-size: 16px;
   }
   .buyNowButton{
+    cursor: pointer;
     width: 100%;
     padding: 15px 0;
     border-radius: 5px;

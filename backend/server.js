@@ -512,7 +512,9 @@ app.post('/add-to-cart', verifyToken, (req, res) => {
             console.log(err)
           }
 
-        console.log('Добавлено в корзину')
+          console.log(query)
+
+          console.log('Добавлено в корзину')
         })
       }
 
@@ -699,7 +701,6 @@ app.get('/get-sizes', (req, res) => {
     if (err) {
       console.log(err)
     }
-
     res.json(results)
   })
 })

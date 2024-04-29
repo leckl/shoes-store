@@ -290,6 +290,7 @@ const loadImages = () => {
     border-radius: 50px;
     border: 1px solid #123026;
     padding: 9px 15px;
+    color: #123026;
   }
   .colorsSlider{
     padding-top: 15px;

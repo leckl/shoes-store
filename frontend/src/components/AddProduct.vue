@@ -1,7 +1,7 @@
 <script setup>
   import axios from 'axios';
   import { Form, Field, ErrorMessage } from 'vee-validate';
-  import { onMounted, reactive, ref } from 'vue';
+  import { computed, onMounted, reactive, ref } from 'vue';
   import * as yup from 'yup'
 
   const schema = yup.object().shape({
@@ -16,6 +16,10 @@
 
   const colors = reactive([])
   const sizes = reactive([])
+  let selectedSizes = reactive([])
+  let storedSelectedSizes = reactive([])
+  const activeSize = ref('activeSize')
+  const disabledSize = ref('disabledSize')
 
   const getColors = () => {
     axios.get('http://localhost:3001/get-colors')
@@ -29,10 +33,20 @@
   const getSizes = () => {
     axios.get('http://localhost:3001/get-sizes')
     .then(response => {
-      response.data.forEach(element => {
-        sizes.push(element)
-      })
+      sizes.value = response.data
+      console.log(sizes.value[9].sizeId)
     })
+  }
+
+  const selectSize = (id) => {
+    selectedSizes.push(sizes.value[id].sizeId)
+    localStorage.setItem('selectedSizes', JSON.stringify(selectedSizes))
+    storedSelectedSizes = localStorage.getItem('selectedSizes')
+    console.log(storedSelectedSizes.includes(1))
+  }
+
+  const checkIsSelected = (id) => {
+    return storedSelectedSizes.includes(id)
   }
 
   onMounted(() => {
@@ -96,8 +110,9 @@
     <div class="adminSizes">
       <h2 class="adminSubName">Размеры товара</h2>
       <div class="productSizesContainer">
-        <div v-for="size in sizes" :key="sizes.sizeId" class="size">{{ size.size }}</div>
-      </div>
+        <div @click="selectSize(sizeKey)" v-for="(size, sizeKey) in sizes.value" :key="sizeKey" 
+        :class="[checkIsSelected(sizeKey) ? activeSize : disabledSize]">{{ size.size }}</div>
+      </div> 
     </div>
   </section>
 </template>
@@ -131,5 +146,19 @@
     border-radius: 100%;
     border: 0.5px solid black;
     cursor: pointer;
+  }
+  .disabledSize{
+    cursor: pointer;
+    border-radius: 50px;
+    border: 1px solid #123026;
+    padding: 9px 15px;
+    color: #123026;
+  }
+  .activeSize{
+    cursor: pointer;
+    border-radius: 50px;
+    background-color: #123026;
+    padding: 9px 15px;
+    color: #fff;
   }
 </style>

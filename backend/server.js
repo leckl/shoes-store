@@ -661,6 +661,8 @@ app.get('/is-admin', verifyToken, (req, res) => {
   })
 })
 
+app.put('/')
+
 app.delete('/delete-item', (req, res) => {
   const itemId = req.body
   const deleteQueries = [

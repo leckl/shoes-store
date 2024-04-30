@@ -65,7 +65,7 @@ const changePassword = () => {
         <ErrorMessage class="alertPhrase" name="newPassword" />
       </label>
       <label class="dataFieldContainer">
-        <p class="dataName">Подтверждение нового пароля</p>
+        <p class="dataName">Подтверждение пароля</p>
         <Field class="dataField" name="confirmNewPassword" placeholder="*******" id="confirmNewPassword" v-model="passwordValues.confirmNewPassword" type="password" />
         <ErrorMessage class="alertPhrase" name="confirmNewPassword" />
       </label>

@@ -14,10 +14,10 @@ app.use(express.json())
 const port = 3001
 
 const con = mysql.createConnection({
-	host: 'localhost',
-	user: 'root',
-	database: 'atlas-shoes',
-	password: '',
+	host: 'web.edu',
+	user: '21046',
+	database: '21046_atlas-shoes',
+	password: 'webbcq',
 })
 
 con.connect(err => {
@@ -512,7 +512,9 @@ app.post('/add-to-cart', verifyToken, (req, res) => {
             console.log(err)
           }
 
-        console.log('Добавлено в корзину')
+          console.log(query)
+
+          console.log('Добавлено в корзину')
         })
       }
 
@@ -676,12 +678,32 @@ app.delete('/delete-item', (req, res) => {
   deleteQueries.forEach(query => {
     con.query(query, [itemId], (err, results) => {
       if (err) {
-        con.rollback(() => {
-          console.log(err)
-          return res.status(500).send('Ошибка сервера')
-        })
+        console.log(err)
       }
     })
+  })
+})
+
+app.get('/get-colors', (req, res) => {
+  const query = `SELECT * FROM colors`
+
+  con.query(query, (err, results) => {
+    if (err) {
+      console.log(err)
+    }
+
+    res.json(results)
+  })
+})
+
+app.get('/get-sizes', (req, res) => {
+  const query = `SELECT * FROM sizes`
+
+  con.query(query, (err, results) => {
+    if (err) {
+      console.log(err)
+    }
+    res.json(results)
   })
 })
 
@@ -699,7 +721,7 @@ app.get('/protected-route', verifyToken, (req, res) => {
     req.user = decoded
     res.send('Доступ к защищенному маршруту разрешен')
   })
-});
+})
 
 function verifyToken(req, res, next) {
   const token = req.headers['authorization']

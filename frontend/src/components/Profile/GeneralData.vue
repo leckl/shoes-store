@@ -109,7 +109,6 @@ import * as yup from 'yup'
 		border: none;
 		background-color: #fff;
 		padding: 13px;
-		border-radius: 5px;
 		outline: 1px solid #123026;
 		font-size: 16px;
 	}

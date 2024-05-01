@@ -14,10 +14,10 @@ app.use(express.json())
 const port = 3001
 
 const con = mysql.createConnection({
-	host: 'web.edu',
-	user: '21046',
-	database: '21046_atlas-shoes',
-	password: 'webbcq',
+	host: 'localhost',
+	user: 'root',
+	database: 'atlas-shoes',
+	password: '',
 })
 
 con.connect(err => {
@@ -704,6 +704,39 @@ app.get('/get-sizes', (req, res) => {
       console.log(err)
     }
     res.json(results)
+  })
+})
+
+app.post('/create-item', (req, res) => {
+  const { itemName, itemCategory, itemPrice, itemMaterial, itemLining, itemSole, itemSeason , itemSizes, itemColors } = req.body
+
+  const addItemQuery = `INSERT INTO items (itemName, itemCategory, itemPrice, itemMaterial, itemLining, itemSole, itemSeason)
+  VALUES (?, ?, ?, ?, ?, ?, ?)`
+
+  const values = [itemName, itemCategory, itemPrice, itemMaterial, itemLining, itemSole, itemSeason]
+
+  con.query(addItemQuery, values, (err, result) => {
+    if (err) {
+      console.log(err)
+    }
+    
+    const itemId = result.insertId
+
+    const insertSizesQuery = `INSERT INTO item_sizes (itemId, sizeId) VALUES (?, ?)`
+    con.query(insertSizesQuery, [itemId, itemSizes], (err, result) => {
+      if (err) {
+        console.log(err)
+      }
+    })
+
+    const insertItemColorsQuery = `INSERT INTO item_colors (itemId, colorId) VALUES (?, ?)`
+    con.query(insertItemColorsQuery, [itemId, itemColors], (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+    })
+
+    console.log('Товар добавлен')
   })
 })
 

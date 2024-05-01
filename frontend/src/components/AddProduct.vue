@@ -8,56 +8,120 @@
     itemName: yup.string().required('Заполните поле'),
     itemCategory: yup.string().required('Заполните поле'),
     itemPrice: yup.number().required('Заполните поле'),
-    itemMaterial: yup.number().required('Заполните поле'),
-    itemLining: yup.number().required('Заполните поле'),
-    itemSole: yup.number().required('Заполните поле'),
-    itemSeason: yup.number().required('Заполните поле'),
+    itemMaterial: yup.string().required('Заполните поле'),
+    itemLining: yup.string().required('Заполните поле'),
+    itemSole: yup.string().required('Заполните поле'),
+    itemSeason: yup.string().required('Заполните поле'),
   })
 
   const colors = reactive([])
   const sizes = reactive([])
-  let selectedSizes = reactive([])
-  let storedSelectedSizes = reactive([])
-  const activeSize = ref('activeSize')
-  const disabledSize = ref('disabledSize')
+  let selectedSizes = ref([])
+  let storedSelectedSizes = ref(JSON.parse(localStorage.getItem('selectedSizes')) || [])
+  let selectedColors = ref([])
+  let storedSelectedColors = ref(JSON.parse(localStorage.getItem('selectedColors')) || [])
+  const activeSize = 'activeSize'
+  const disabledSize = 'disabledSize'
 
   const getColors = () => {
     axios.get('http://localhost:3001/get-colors')
     .then(response => {
-      response.data.forEach(element => {
-        colors.push(element)
-      })
+      colors.push(...response.data)
+      console.log(colors[2].colorId)
+    })
+    .catch(error =>{
+      console.log(error)
     })
   }
 
   const getSizes = () => {
     axios.get('http://localhost:3001/get-sizes')
     .then(response => {
-      sizes.value = response.data
-      console.log(sizes.value[9].sizeId)
+      sizes.push(...response.data)
+      console.log(sizes[9].sizeId)
+    })
+    .catch(error =>{
+      console.log(error)
     })
   }
 
   const selectSize = (id) => {
-    selectedSizes.push(sizes.value[id].sizeId)
-    localStorage.setItem('selectedSizes', JSON.stringify(selectedSizes))
-    storedSelectedSizes = localStorage.getItem('selectedSizes')
-    console.log(storedSelectedSizes.includes(1))
+    const index = selectedSizes.value.indexOf(sizes[id].sizeId);
+    if (index === -1) {
+      selectedSizes.value.push(sizes[id].sizeId);
+    } else {
+      selectedSizes.value.splice(index, 1);
+    }
+    localStorage.setItem('selectedSizes', JSON.stringify(selectedSizes.value))
+    storedSelectedSizes.value = JSON.parse(localStorage.getItem('selectedSizes')) || [];
   }
 
-  const checkIsSelected = (id) => {
-    return storedSelectedSizes.includes(id)
+  const CheckIsSizeSelected = (id) => {
+    return storedSelectedSizes.value.includes(id)
+  }
+
+  const selectColor = (id) => {
+    const index = selectedColors.value.indexOf(colors[id].colorId);
+    if (index === -1) {
+      selectedColors.value.push(colors[id].colorId);
+    } else {
+      selectedColors.value.splice(index, 1);
+    }
+    localStorage.setItem('selectedColors', JSON.stringify(selectedColors.value))
+    storedSelectedColors.value = JSON.parse(localStorage.getItem('selectedColors')) || [];
   }
 
   onMounted(() => {
     getColors()
     getSizes()
+    const storedSizesData = JSON.parse(localStorage.getItem('selectedSizes'));
+    if (storedSizesData) {
+      selectedSizes.value = storedSizesData;
+    }
+    const storedColorsData = JSON.parse(localStorage.getItem('selectedColors'));
+    if (storedColorsData) {
+      selectedColors.value = storedColorsData;
+    }
   })
+
+  const clearFormData = () => {
+  itemName.value = ''
+  itemCategory.value = ''
+  itemPrice.value = ''
+  itemMaterial.value = ''
+  itemLining.value = ''
+  itemSole.value = ''
+  itemSeason.value = ''
+  selectedSizes.value = []
+  selectedColors.value = []
+}
+
+  const createItem = () => {
+    const itemData = {
+    itemName: itemName.value,
+    itemCategory: itemCategory.value,
+    itemPrice: itemPrice.value,
+    itemMaterial: itemMaterial.value,
+    itemLining: itemLining.value,
+    itemSole: itemSole.value,
+    itemSeason: itemSeason.value,
+    itemSizes: selectedSizes.value,
+    itemColors: selectedColors.value
+  }
+
+  axios.post('http://localhost:3001/create-item', itemData)
+  .then(response => {
+    clearFormData()
+  })
+  .catch(error => {
+    console.log(error)
+  })
+  }
 </script>
 <template>
   <section class="addProduct">
     <h2 class="generalName">Добавление товара</h2>
-    <Form class="adminForm" :validation-schema="schema">
+    <Form @submit="createItem" class="adminForm" :validation-schema="schema">
       <h2 class="adminSubName">Основная информация</h2>
       <div class="adminFormRow">
         <label class="dataFieldContainer">
@@ -100,18 +164,19 @@
           <ErrorMessage class="alertPhrase" name="itemSeason"/>
         </label>
       </div>
+      <button>Добавить товар</button>
     </Form>
     <div class="adminColors">
       <h2 class="adminSubName">Цвета товара</h2>
       <div class="colorsContainer">
-        <div v-for="color in colors" :key="color.colorId" :style="{ backgroundColor: color.colorCode }" class="adminColor"></div>
+        <div @click="selectColor(colorKey)" v-for="(color, colorKey) in colors" :key="colorKey" :style="{ backgroundColor: color.colorCode }"class="adminColor"></div>
       </div>
     </div>
     <div class="adminSizes">
       <h2 class="adminSubName">Размеры товара</h2>
       <div class="productSizesContainer">
-        <div @click="selectSize(sizeKey)" v-for="(size, sizeKey) in sizes.value" :key="sizeKey" 
-        :class="[checkIsSelected(sizeKey) ? activeSize : disabledSize]">{{ size.size }}</div>
+        <div @click="selectSize(sizeKey)" v-for="(size, sizeKey) in sizes" :key="sizeKey" 
+        :class="{ [activeSize]: CheckIsSizeSelected(sizeKey + 1), [disabledSize]: !CheckIsSizeSelected(sizeKey + 1) }">{{ size.size }}</div>
       </div> 
     </div>
   </section>
@@ -144,7 +209,8 @@
   .adminColor{
     padding: 2%;
     border-radius: 100%;
-    border: 0.5px solid black;
+    border: 2px solid white;
+    outline: 0.7px solid black;
     cursor: pointer;
   }
   .disabledSize{
@@ -157,6 +223,7 @@
   .activeSize{
     cursor: pointer;
     border-radius: 50px;
+    border: 1px solid #123026;
     background-color: #123026;
     padding: 9px 15px;
     color: #fff;

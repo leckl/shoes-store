@@ -157,6 +157,7 @@ body{
   padding: 0;
   font-family: Roboto, 'sans-serif';
   box-sizing: border-box;
+  color: #123026;
 }
 .container{
   padding: 0px 20px;

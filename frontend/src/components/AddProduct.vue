@@ -169,7 +169,7 @@
     <div class="adminColors">
       <h2 class="adminSubName">Цвета товара</h2>
       <div class="colorsContainer">
-        <div @click="selectColor(colorKey)" v-for="(color, colorKey) in colors" :key="colorKey" :style="{ backgroundColor: color.colorCode }"class="adminColor"></div>
+        <div @click="selectColor(colorKey)" v-for="(color, colorKey) in colors" :key="colorKey" :style="{ backgroundColor: color.colorCode }" class="adminColor"></div>
       </div>
     </div>
     <div class="adminSizes">

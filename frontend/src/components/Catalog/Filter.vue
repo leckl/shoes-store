@@ -86,7 +86,7 @@ export default {
                     <p class="filterName">{{ filter.localisationName }}</p>
                     <img class="filterImage" :class="{ 'not-last': key !== filters.length }" src="../../assets/Catalog/dropDown.svg" alt="Drop down button">
                 </div>
-                    <ul class="filterOptions" v-if="filter.isOpen && key < filters.length - 2">
+                    <ul class="filterOptions" v-if="filter.isOpen && key < filters.length - 1">
                         <li v-for="(option, optionKey) in filter.options" :key="optionKey">
                             <label class="checkBoxContainer">
                                 {{ option }}
@@ -98,7 +98,7 @@ export default {
                 
                 <!-- Последний элемент -->
 
-                <div class="filterOptions" v-if="filter.isOpen && key == filters.length - 2">
+                <div class="filterOptions" v-if="filter.isOpen && key == filters.length - 1">
                     <input v-for="(priceComponent, priceKey) in filter.options" :key="priceKey" class="filterInput"
                     :placeholder="priceComponent" v-model="selectedFilters[key][priceKey]" type="text">
                     <!-- <input class="filterInput" placeholder="До" v-model="selectedFilters[key]" type="text"> -->
@@ -132,7 +132,7 @@ export default {
                     <p class="filterName">{{ filter.localisationName }}</p>
                     <img class="filterImage" :class="{ 'not-last': key !== filters.length }" src="../../assets/Catalog/dropDown.svg" alt="Drop down button">
                 </div>
-                    <ul class="filterOptions" v-if="filter.isOpen && key < filters.length - 2">
+                    <ul class="filterOptions" v-if="filter.isOpen && key < filters.length - 1">
                         <li v-for="(option, optionKey) in filter.options" :key="optionKey">
                             <label class="checkBoxContainer">
                                 {{ option }}
@@ -144,7 +144,7 @@ export default {
                 
                 <!-- Последний элемент -->
 
-                <div class="filterOptions" v-if="filter.isOpen && key == filters.length - 2">
+                <div class="filterOptions" v-if="filter.isOpen && key == filters.length - 1">
                     <input v-for="(priceComponent, priceKey) in filter.options" :key="priceKey" class="filterInput"
                     :placeholder="priceComponent" v-model="selectedFilters[key][priceKey]" type="text">
                     <!-- <input class="filterInput" placeholder="До" v-model="selectedFilters[key]" type="text"> -->

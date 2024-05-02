@@ -112,33 +112,15 @@ export default {
          </div>
     </template>
 <style>
-    .item{
-        display: block;
-        padding-bottom: 40px;
-        color: #123026;
-        flex-basis: calc(28% - 3 * 15px);
-    }
-    @media screen and (max-width: 1155px){
-        .item{
-            flex-basis: calc(37% - 3 * 15px);
-        }
-    }
-    @media screen and (max-width: 862px){
-        .item{
-            flex-basis: calc(51% - 1 * 15px);
-        }
-    }
-    @media screen and (max-width: 375px){
-        .item{
-            flex-basis: calc(100%);
-        }
-    }
     .itemName{
+        height: 40px;
         display: flex;
         align-items: center;
         justify-content: space-between;
         font-weight: 600;
         padding-bottom: 3px;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .itemPhoto{
         width: 100%;
@@ -167,7 +149,7 @@ export default {
     }
     .color{
         display: inline-block;
-        padding: 5%;
+        padding: 17px;
         border-radius: 100%;
         border: 0.5px solid black;
         cursor: pointer;

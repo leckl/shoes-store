@@ -14,10 +14,10 @@ app.use(express.json())
 const port = 3001
 
 const con = mysql.createConnection({
-	host: 'localhost',
-	user: 'root',
-	database: 'atlas-shoes',
-	password: '',
+	host: 'web.edu',
+	user: '21046',
+	database: '21046_atlas-shoes',
+	password: 'webbcq',
 })
 
 con.connect(err => {
@@ -663,24 +663,25 @@ app.get('/is-admin', verifyToken, (req, res) => {
   })
 })
 
-app.put('/')
+app.put('/edit-item', (req, res) => {
+  
+})
 
 app.delete('/delete-item', (req, res) => {
-  const itemId = req.body
-  const deleteQueries = [
-    `DELETE FROM item_colors WHERE itemId = ?`,
-    `DELETE FROM item_sizes WHERE itemId = ?`,
-    `DELETE FROM wishlist WHERE itemId = ?`,
-    `DELETE FROM cart WHERE itemId = ?`,
-    `DELETE FROM items WHERE itemId = ?`
-  ];
+  const { itemId } = req.body
 
-  deleteQueries.forEach(query => {
-    con.query(query, [itemId], (err, results) => {
+  const deleteQueries =
+    `DELETE FROM item_colors WHERE itemId = ?;
+    DELETE FROM item_sizes WHERE itemId = ?;
+    DELETE FROM wishlist WHERE itemId = ?;
+    DELETE FROM cart WHERE itemId = ?;
+    DELETE FROM items WHERE itemId = ?;`
+
+    con.query(deleteQueries, [itemId], (err, results) => {
       if (err) {
         console.log(err)
       }
-    })
+      console.log('Товар удалён')
   })
 })
 
@@ -723,22 +724,28 @@ app.post('/create-item', (req, res) => {
     const itemId = result.insertId
 
     const insertSizesQuery = `INSERT INTO item_sizes (itemId, sizeId) VALUES (?, ?)`
-    con.query(insertSizesQuery, [itemId, itemSizes], (err, result) => {
-      if (err) {
-        console.log(err)
-      }
+    itemSizes.forEach(element => {
+      con.query(insertSizesQuery, [itemId, element], (err, result) => {
+        if (err) {
+          console.log(err)
+        }
+      })
     })
 
     const insertItemColorsQuery = `INSERT INTO item_colors (itemId, colorId) VALUES (?, ?)`
-    con.query(insertItemColorsQuery, [itemId, itemColors], (err, result) => {
-      if (err) {
-        console.log(err);
-      }
+    itemColors.forEach(element => {
+      con.query(insertItemColorsQuery, [itemId, element], (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+      })
     })
 
     console.log('Товар добавлен')
   })
 })
+
+app.put('/edit-item',)
 
 app.get('/protected-route', verifyToken, (req, res) => {
   const token = req.headers['authorization']

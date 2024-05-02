@@ -15,6 +15,7 @@ let role = ref('')
 let isAdmin = ref(false)
 let isWideScreen = ref(window.innerWidth > 750)
 let modules = [Navigation]
+let sliderNum = ref(1)
 
 onMounted(() => {
   fetchItem()
@@ -73,7 +74,7 @@ const addToCart = () => {
   }
 
   axios.post('http://localhost:3001/add-to-cart', {
-      itemId: item.value[0].itemId
+      itemId: itemId
   }, {
       headers: {
           Authorization: `Bearer ${token}`
@@ -89,11 +90,14 @@ const addToCart = () => {
 }
 
 const deleteItem = () => {
-  axios.post('http://localhost:3001/delete-item',{
+  axios.delete('http://localhost:3001/delete-item', {
     itemId: item.value[0].itemId
   })
   .then(response => {
     console.log('Товар был удалён')
+  })
+  .catch(error => {
+    console.log(error)
   })
 }
 
@@ -103,20 +107,32 @@ const loadImages = () => {
   })
 }
 
+const onNextSlide = () => {
+  if (sliderNum.value < 4) {
+      sliderNum.value++
+  }
+}
+const onPrevSlide = () => {
+  if (sliderNum.value > 1) {
+    sliderNum.value--
+  }
+}
+
 </script>
 <template>
   <section class="itemPage">
     <div v-if="isWideScreen" class="container itemContainer">
       <div class="itemImgContainer">
         <div class="row">
-          <img v-for="(image, id) in images.slice(0, 2)" :key="id" :src="image" class="itemImage" alt="Item image">
+          <img v-for="(image, id) in images.slice(0, 2)" :key="id" src="../assets/Items/Item1-1.png" class="itemImage" alt="Item image">
         </div>
         <div v-if="images.length > 2" class="row">
-          <img v-for="(image, id) in images.slice(2)" :key="id" :src="image" class="itemImage" alt="Item image">
+          <img v-for="(image, id) in images.slice(2)" :key="id"  src="../assets/Items/Item1-1.png" class="itemImage" alt="Item image">
         </div>
       </div>
       <div v-for="(itemInfo, key) in item" :key="key" class="itemInfoContainer">
         <div class="productNameContainer">
+          <p>{{ itemId }}</p>
           <p class="productName">{{ itemInfo.itemName }}</p>
           <img class="toFavorite" src="../assets/Catalog/toFavorite.svg" alt="Favorite">
         </div>
@@ -149,7 +165,7 @@ const loadImages = () => {
         <div class="productButtonsContainer">
           <button v-if="!isAdmin" @click="addToCart" class="addToCartButton">Добавить в корзину</button>
           <!-- <button v-if="!isAdmin" class="buyNowButton">Купить сейчас</button> -->
-          <button v-if="isAdmin" class="buyNowButton">Изменить товар</button>
+          <router-link to="/edit-item"><button v-if="isAdmin" @click="editItem" class="buyNowButton">Изменить товар</button></router-link>
           <button v-if="isAdmin" @click="deleteItem" class="logOutButton">Удалить товар</button>
         </div>
       </div>
@@ -170,9 +186,9 @@ const loadImages = () => {
           <img :src="image" class="productSliderImage" alt="Color image">
         </swiper-slide>
         <div class="sliderButtons">
-            <img src="../assets/landingImage/Left.svg" class="swiperButtonPrev">
-            <span>1/3</span>
-            <img src="../assets/landingImage/Right.svg" class="swiperButtonNext">
+            <img @click="onPrevSlide" src="../assets/landingImage/Left.svg" class="swiperButtonPrev">
+            <span>{{ sliderNum }}/4</span>
+            <img @click="onNextSlide" src="../assets/landingImage/Right.svg" class="swiperButtonNext">
         </div>
       </swiper>
       <div class="productNameContainer">

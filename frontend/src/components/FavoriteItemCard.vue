@@ -50,10 +50,10 @@ import axios from 'axios';
     <img @click="redirectToProduct(id)" class="itemPhoto" src="../assets/Catalog/itemPhoto.png" alt="Item photo">
     <h3 class="itemName">{{ name }} <img class="toFavorite" @click="deleteFromWishlist" src="../assets/Catalog/toFavoriteSelected.svg" alt="Favorite"></h3>
     <p class="itemCategorie">{{ category }}</p>
-    <p class="itemPrice">{{ price }}$</p>
     <div class="colorsContainer">
       <div class="color" v-for="(color, id) in colors.split(' ')" :key="id" :style="{ backgroundColor: color }"></div>
     </div>
+    <p class="itemPrice">{{ price }}$</p>
     <button class="itemButton">В корзину</button>
   </div>
 </template>

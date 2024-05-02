@@ -35,8 +35,8 @@
       fetchItems() {
       axios.get('http://localhost:3001/catalog')
         .then(response => {
-          const catalogStore = useCatalogStore() // Изменено: Получаем хранилище
-          catalogStore.setFilteredItems(response.data); // Изменено: Установка отфильтрованных элементов
+          const catalogStore = useCatalogStore()
+          catalogStore.setFilteredItems(response.data)
         })
         .catch(err => {
           console.log(err)
@@ -44,9 +44,9 @@
       },
       applyFilters(filteredItems) {
         const catalogStore = useCatalogStore();
-        let savedItems = catalogStore.getFilteredItems(); // Получить сохраненные результаты SQL-запроса
-        savedItems = savedItems.filter(item => filteredItems.includes(item)); // Применяем фильтры к сохраненным результатам
-        catalogStore.setFilteredItems(savedItems); // Устанавливаем новые отфильтрованные элементы
+        let savedItems = catalogStore.getFilteredItems()
+        savedItems = savedItems.filter(item => filteredItems.includes(item))
+        catalogStore.setFilteredItems(savedItems)
       },
       colorsConformity() {
         axios.get('http://localhost:3001/colorsConformity')
@@ -78,7 +78,8 @@
           <Filter class="catalogItemCard" @apply-filters="applyFilters"/>
         </section>
         <section class="catalogGrid">
-          <CatalogItemCard  v-for="item in filteredItems" :key="item.itemId" 
+
+          <CatalogItemCard class="item" v-for="item in filteredItems" :key="item.itemId" 
           :id="item.itemId"
           :name="item.itemName" 
           :category="item.itemCategory"
@@ -89,11 +90,34 @@
     </section>
   </template>
   <style>
+  .item{
+      display: block;
+      padding-bottom: 40px;
+      color: #123026;
+      cursor: pointer;
+      flex-basis: calc(28% - 3 * 15px);
+    }
+    @media screen and (max-width: 1155px){
+      .item{
+        flex-basis: calc(37% - 3 * 15px);
+      }
+    }
+    @media screen and (max-width: 862px){
+      .item{
+        flex-basis: calc(51% - 1 * 15px);
+      }
+    }
+    @media screen and (max-width: 375px){
+      .item{
+        flex-basis: calc(100%);
+      }
+    }
     .catalog{
       padding-top: 50px;
     }
     .catalogGrid{
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
       gap: 15px;
       justify-content: center;
       flex-wrap: wrap;

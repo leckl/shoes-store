@@ -57,7 +57,6 @@
   .favoriteContainer{
     display: flex;
     gap: 15px;
-    justify-content: center;
     flex-wrap: wrap;
   }
   .wishlistName{

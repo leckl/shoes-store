@@ -2,11 +2,15 @@
   const props = defineProps({
     totalPrice: Number
   })
+
+  const makeOrder = () => {
+    
+  }
 </script>
 <template>
   <p class="totalPrice">Сумма заказа: {{ totalPrice }}$</p>
   <p class="orderInfo">Оформляя заказ вы соглашаетесь с пользовательским соглашением</p>
-  <button class="makeOrderButton">Офоромить заказ</button>
+  <button @click="makeOrder" class="makeOrderButton">Офоромить заказ</button>
 </template>
 <style>
   .makeOrderButton{

@@ -7,7 +7,7 @@
             <div class="addBlockTwoPhraseContainer">
                 <p class="mainPhrase">Оставайтесь в уюте весь год</p>
                 <p class="subPhrase">Наши самые продаваемые ботинки, но обновлённые</p>
-                <router-link to="/" class="buyButtonTwo">Узнать больше</router-link>
+                <router-link to="/about" class="buyButtonTwo">Узнать больше</router-link>
             </div>
         </div>
     </section>

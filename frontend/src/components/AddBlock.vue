@@ -14,7 +14,7 @@
     <div class="addBlockPhraseContainer">
       <p class="mainPhrase">Водонепроницаемы Постоянный комфорт</p>
       <p class="subPhrase">Новая коллекция уже здесь</p>
-      <router-link to="/" class="buyButton">Купить</router-link>
+      <router-link to="/catalog" class="buyButton">Купить</router-link>
     </div>
   </div>
   </section>

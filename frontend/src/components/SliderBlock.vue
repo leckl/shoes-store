@@ -121,7 +121,7 @@
                 </swiper-slide>
                 <div class="sliderButtons">
                     <img src="../assets/landingImage/Left.svg" @click="onPrevSlide" class="swiperButtonPrev">
-                    <span>{{sliderNum}}/3</span>
+                    <span>{{ sliderNum }}/3</span>
                     <img src="../assets/landingImage/Right.svg" @click="onNextSlide" class="swiperButtonNext">
                 </div>
                 <div class="buttonCatalogContainer">

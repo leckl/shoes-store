@@ -1,10 +1,12 @@
 <script setup>
+import router from '@/router';
+
   const props = defineProps({
     totalPrice: Number
   })
 
   const makeOrder = () => {
-    
+    router.push('/order')
   }
 </script>
 <template>

@@ -1,8 +1,6 @@
 <script>
-    import { vScrollLock } from '@vueuse/components'
-
     import { RouterLink } from 'vue-router';
-    
+    import axios from 'axios';    
     import { Swiper, SwiperSlide } from 'swiper/vue';
     import { Navigation } from 'swiper/modules';
 
@@ -16,44 +14,43 @@
         },
         data() {
             return {
-                products: [ //Это начальный пример работы (Позже будет выполняться с базой данных)
-                    {
-                        productId: 0,
-                        productName: 'Обувь 1',
-                        productPrice: '199$',
-                        productIsStock: true
-                    },
-                    {
-                        productId: 1,
-                        productName: 'Обувь 2',
-                        productPrice: '199$',
-                        productIsStock: true
-                    },
-                    {
-                        productId: 2,
-                        productName: 'Обувь 3',
-                        productPrice: '199$',
-                        productIsStock: false
-                    },
-                    {
-                        productId: 3,
-                        productName: 'Обувь 4',
-                        productPrice: '199$',
-                        productIsStock: true
-                    },
-                    {
-                        productId: 4,
-                        productName: 'Обувь 5',
-                        productPrice: '199$',
-                        productIsStock: true
-                    },
-                    {
-                        productId: 5,
-                        productName: 'Обувь 6',
-                        productPrice: '199$',
-                        productIsStock: true
-                    }
-                ],
+                products: [],
+                // {
+                //         productId: 0,
+                //         productName: 'Обувь 1',
+                //         productPrice: '199$',
+                //         productIsStock: true
+                //     },
+                //     {
+                //         productId: 1,
+                //         productName: 'Обувь 2',
+                //         productPrice: '199$',
+                //         productIsStock: true
+                //     },
+                //     {
+                //         productId: 2,
+                //         productName: 'Обувь 3',
+                //         productPrice: '199$',
+                //         productIsStock: false
+                //     },
+                //     {
+                //         productId: 3,
+                //         productName: 'Обувь 4',
+                //         productPrice: '199$',
+                //         productIsStock: true
+                //     },
+                //     {
+                //         productId: 4,
+                //         productName: 'Обувь 5',
+                //         productPrice: '199$',
+                //         productIsStock: true
+                //     },
+                //     {
+                //         productId: 5,
+                //         productName: 'Обувь 6',
+                //         productPrice: '199$',
+                //         productIsStock: true
+                //     }
                 isWideScreen: window.innerWidth > 990,
                 cols: 2,
                 sliderNum: 1,
@@ -76,6 +73,18 @@
                     this.sliderNum--
                 }
             },
+            fetchItems() {
+                axios.get('http://localhost:3001/slider-elements')
+                .then(response => {
+                    this.products = response.data
+                })
+                .catch(error => {
+                    console.log(err)
+                })
+            }
+        },
+        mounted() {
+            this.fetchItems()
         },
         beforeDestroy() {
             window.removeEventListener('resize', this.handleResize)
@@ -113,9 +122,8 @@
                 <swiper-slide class="sliderBlockContainer" v-for="(product, index) in products" :key="index">
                     <router-link to="/" class="sliderElement">
                         <img class="sliderImage" src="../assets/landingImage/SliderImage.jpg" alt="Slider element">
-                        <!-- <div class="soldOut" v-if="product.productIsStock">Sold out!</div> В разработке -->
-                        <p class="sliderName">{{ product.productName }}</p>
-                        <p class="sliderPrice">{{ product.productPrice }}</p>
+                        <p class="sliderName">{{ product.itemName }}</p>
+                        <p class="sliderPrice">{{ product.itemPrice }}$</p>
                         <button class="sliderButton">Add to cart</button>
                     </router-link> 
                 </swiper-slide>
@@ -137,8 +145,8 @@
                         <router-link to="/" class="sliderElement">
                             <img class="sliderImage" src="../assets/landingImage/SliderImage.jpg" alt="Slider element">
                             <!-- <div class="soldOut" v-if="product.productIsStock">Sold out!</div> В разработке -->
-                            <p class="sliderName">{{ product.productName }}</p>
-                            <p class="sliderPrice">{{ product.productPrice }}</p>
+                            <p class="sliderName">{{ product.itemName }}</p>
+                            <p class="sliderPrice">{{ product.itemPrice }}$</p>
                             <button class="sliderButton">Add to cart</button>
                         </router-link> 
                     </div>

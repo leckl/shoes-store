@@ -203,6 +203,27 @@ app.post('/sing-in', (req, res) => {
   })
 })
 
+app.post('/add-email', verifyToken, (req, res) => {
+  const token = req.headers['authorization'].split(' ')[1]
+  if (!token) res.send('Вы не авторизованы')
+
+  jwt.verify(token, 'secretKey', (err, decoded) => {
+    if (err) console.log(err)
+
+    const { userId } = decoded
+    const { email } = req.body
+
+    const query = `INSERT INTO users (userEmail) VALUES (?) WHERE userId = ?`
+    
+    con.query(query, [email, userId], (err, result) => {
+      if (err) console.log(err)
+      
+      console.log(query, email, userId)
+      console.log('Email был добавлен')
+    })
+  })
+})
+
 app.get('/user-profile', verifyToken, (req, res) => {
   const token = req.headers['authorization'].split(' ')[1];
   if (!token) {
@@ -226,9 +247,6 @@ app.get('/user-profile', verifyToken, (req, res) => {
       console.log(results)
       res.send(results)
     })
-
-    // const {userName, userLogin, role } = decoded
-    // res.status(200).json({ userId, userName, userLogin, role })
   })
 })
 
@@ -637,6 +655,16 @@ app.get('/get-cart', verifyToken, (req, res) => {
   })
 })
 
+app.get('/slider-elements', (req, res) => {
+  const query = `SELECT * FROM items LIMIT 6`
+  
+  con.query(query, (err, results) => {
+    if(err) console.log(err)
+
+    res.json(results)
+  })
+})
+
 app.get('/is-admin', verifyToken, (req, res) => {
   const token = req.headers['authorization'].split(' ')[1];
   if (!token) {
@@ -665,6 +693,23 @@ app.get('/is-admin', verifyToken, (req, res) => {
 
 app.put('/edit-item', (req, res) => {
   
+})
+
+app.delete('/delete-item', (req, res) => {
+  const { itemId } = req.body
+
+  const deleteQueries =
+    `DELETE FROM item_colors WHERE itemId = ?;
+    DELETE FROM item_sizes WHERE itemId = ?;
+    DELETE FROM wishlist WHERE itemId = ?;
+    DELETE FROM cart WHERE itemId = ?; DELETE FROM items WHERE itemId = ?;`
+
+    con.query(deleteQueries, [itemId], (err, results) => {
+      if (err) {
+        console.log(err)
+      }
+      console.log('Товар удалён')
+  })
 })
 
 app.get('/get-colors', (req, res) => {
@@ -727,40 +772,8 @@ app.post('/create-item', (req, res) => {
   })
 })
 
-app.delete('/delete-item/:id', (req, res) => {
-  const itemId = req.params.id
-
-  const deleteQueries = [
-    'DELETE FROM item_colors WHERE itemId = ?',
-    'DELETE FROM item_sizes WHERE itemId = ?',
-    'DELETE FROM wishlist WHERE itemId = ?',
-    'DELETE FROM cart WHERE itemId = ?',
-    'DELETE FROM items WHERE itemId = ?'
-  ]
+app.put('/edit-item', (req, res) => {
   
-  deleteQueries.forEach(query => {
-    con.query(query, [itemId], (err, results) => {
-      if (err) {
-        console.log(err)
-      }
-      console.log('Товар удалён')
-    })
-  })
-})
-
-app.put('/edit-item/:id', (req, res) => {
-  const itemId = req.params.id
-  const { itemName, itemCategory, itemPrice, itemMaterial, itemLining, itemSole, itemSeason } = req.body
-
-  const updateQuery = `UPDATE items SET itemName = ?, itemCategory = ?, itemPrice = ?, itemMaterial = ?, itemLining = ?, itemSole = ?, itemSeason = ? WHERE itemId = ?`
-
-  const itemValues = [itemName, itemCategory, itemPrice, itemMaterial, itemLining, itemSole, itemSeason, itemId]
-
-  con.query(updateQuery, itemValues, (err, result) => {
-    if (err) {
-      console.log(err)
-    }
-  })
 })
 
 app.get('/protected-route', verifyToken, (req, res) => {

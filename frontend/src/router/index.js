@@ -10,6 +10,7 @@ import Profile from '../components/Profile.vue'
 import Favorite from '@/components/Favorite.vue'
 import Cart from '@/components/Cart.vue'
 import EditItem from '@/components/EditItem.vue'
+import Order from '@/components/Order.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -23,7 +24,8 @@ const router = createRouter({
     { name: 'Profille', path: '/profile', component: Profile },
     { name: 'Favorite', path: '/favorite', component: Favorite },
     { name: 'Cart', path: '/cart', component: Cart },
-    { name: 'Edit Item', path: '/edit-item', component: EditItem}
+    { name: 'Edit Item', path: '/edit-item', component: EditItem },
+    { name: 'Order', path: '/order', component: Order }
   ],
   scrollBehavior (to, from, savedPosition){
     return { top: 0 }

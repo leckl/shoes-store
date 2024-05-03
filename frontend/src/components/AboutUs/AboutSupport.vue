@@ -23,10 +23,10 @@
     <div v-if="isWideScreen" class="aboutSupportWrapper">
       <div class="container aboutSupportContainer">
         <div class="aboutSupportTextContainer">
-          <h2 class="aboutSupportMainPhrase">У нас действует тех. поддержка</h2>
-          <h2 class="aboutSupportSubPhrase">Просто напишите нам</h2>
-          <h2 class="aboutSupportEmailPhrase">atlas-shoes@gmail.com</h2>
-          <h2>И мы постараемся помочь вам как можно скорее</h2>
+          <h2 class="aboutSupportPhrase">У нас действует тех. поддержка</h2>
+          <h2 class="aboutSupportPhrase">Просто напишите нам</h2>
+          <h2 class="aboutSupportPhrase">atlas-shoes@gmail.com</h2>
+          <h2 class="aboutSupportPhrase">И мы постараемся помочь вам как можно скорее</h2>
         </div>
       </div>
     </div>
@@ -37,9 +37,9 @@
       <img class="aboutSupportImage__mobile" src="../../assets/AboutUs/AboutSupport.jpg" alt="About support">
       <div class="container aboutSupportContainer__mobile">
         <div class="aboutSupportTextContainer__mobile">
-          <h2 class="aboutSupportMainPhrase">У нас действует тех. поддержка</h2>
-          <h2 class="aboutSupportSubPhrase">Просто напишите нам</h2>
-          <a class="aboutSupportEmailLink" href="#">Написать</a>
+          <h2 class="aboutSupportPhrase">У нас действует тех. поддержка</h2>
+          <h2 class="aboutSupportPhrase">Просто напишите нам</h2>
+          <a class="aboutSupportPhrase" href="#">Написать</a>
         </div>
       </div>
     </div>
@@ -50,6 +50,9 @@
     padding: 0px 20px;
     max-width: 1300px;
     margin: 0 auto;
+  }
+  .aboutSupportPhrase{
+    color: #fff;
   }
   .aboutSupportEmailLink{
     padding: 15px;

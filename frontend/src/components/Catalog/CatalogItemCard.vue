@@ -50,7 +50,7 @@ export default {
             this.addToWishlist()
         },
         redirectToProduct(id) {
-            this.$router.push({ name: 'Item', params: {id: id}})
+            this.$router.push({ path: `/product/${id}` })
         },
         addToWishlist() {
             const token = localStorage.getItem('token')

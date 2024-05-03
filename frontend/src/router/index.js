@@ -23,7 +23,7 @@ const router = createRouter({
     { name: 'Profille', path: '/profile', component: Profile },
     { name: 'Favorite', path: '/favorite', component: Favorite },
     { name: 'Cart', path: '/cart', component: Cart },
-    { name: 'Edit Item', path: '/edit-item', component: EditItem}
+    { name: 'Edit Item', path: '/edit-item/:id', component: EditItem}
   ],
   scrollBehavior (to, from, savedPosition){
     return { top: 0 }

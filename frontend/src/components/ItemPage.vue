@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 import { useRoute } from 'vue-router'
 import EmailBlock from './EmailBlock.vue';
 import { Navigation } from 'swiper/modules';
+import router from '@/router';
 
 const route = useRoute()
 const itemId = route.params.id
@@ -90,7 +91,7 @@ const addToCart = () => {
 }
 
 const deleteItem = () => {
-  axios.delete('http://localhost:3001/delete-item', {
+  axios.delete(`http://localhost:3001/delete-item/${itemId}`, {
     itemId: item.value[0].itemId
   })
   .then(response => {
@@ -99,6 +100,8 @@ const deleteItem = () => {
   .catch(error => {
     console.log(error)
   })
+
+  router.push('/catalog')
 }
 
 const loadImages = () => {
@@ -118,6 +121,10 @@ const onPrevSlide = () => {
   }
 }
 
+const redirectToEdit = () => {
+  router.push({ path: `/edit-item/${itemId}` })
+}
+
 </script>
 <template>
   <section class="itemPage">
@@ -132,7 +139,6 @@ const onPrevSlide = () => {
       </div>
       <div v-for="(itemInfo, key) in item" :key="key" class="itemInfoContainer">
         <div class="productNameContainer">
-          <p>{{ itemId }}</p>
           <p class="productName">{{ itemInfo.itemName }}</p>
           <img class="toFavorite" src="../assets/Catalog/toFavorite.svg" alt="Favorite">
         </div>
@@ -165,7 +171,7 @@ const onPrevSlide = () => {
         <div class="productButtonsContainer">
           <button v-if="!isAdmin" @click="addToCart" class="addToCartButton">Добавить в корзину</button>
           <!-- <button v-if="!isAdmin" class="buyNowButton">Купить сейчас</button> -->
-          <router-link to="/edit-item"><button v-if="isAdmin" @click="editItem" class="buyNowButton">Изменить товар</button></router-link>
+          <button v-if="isAdmin" @click="redirectToEdit" class="buyNowButton">Изменить товар</button>
           <button v-if="isAdmin" @click="deleteItem" class="logOutButton">Удалить товар</button>
         </div>
       </div>

@@ -23,8 +23,8 @@
         <div class="aboutUsPromiseWrapper">
             <div class="container aboutUsPromiseContainer">
                 <div class="aboutUsPromisePhraseContainer">
-                    <h2>Мы гарантируем</h2>
-                    <p>Когда вы выбираете нашу обувь, вы можете быть уверены в том, что получите не только качественный продукт, но и высокий уровень обслуживания. Наша цель – сделать ваш онлайн-покупательный опыт приятным, удобным и беззаботным</p>
+                    <h2 class="aboutPromisePhrase">Мы гарантируем</h2>
+                    <p class="aboutPromisePhrase">Когда вы выбираете нашу обувь, вы можете быть уверены в том, что получите не только качественный продукт, но и высокий уровень обслуживания. Наша цель – сделать ваш онлайн-покупательный опыт приятным, удобным и беззаботным</p>
                 </div>
             </div>
         </div>
@@ -39,6 +39,9 @@
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
+    }
+    .aboutPromisePhrase{
+      color: #fff;
     }
     .aboutUsPromiseContainer{
         display: flex;

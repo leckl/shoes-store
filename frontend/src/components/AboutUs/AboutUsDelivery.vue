@@ -7,8 +7,8 @@ export default {
     <section class="aboutUsDelivery">
         <div class="container aboutUsDeliveryContainer">
             <div class="aboutUsDeliveryPhraseContainer">
-                <h2>В любой точке мира</h2>
-                <p>Atlas предлагает мировую доставку! Мы доставляем товары почти в любую точку мира, чтобы вы могли наслаждаться нашей обувью и аксессуарами, где бы вы ни находились</p>
+                <h2 class="aboutDeliveryPhrase">В любой точке мира</h2>
+                <p class="aboutDeliveryPhrase">Atlas предлагает мировую доставку! Мы доставляем товары почти в любую точку мира, чтобы вы могли наслаждаться нашей обувью и аксессуарами, где бы вы ни находились</p>
             </div>
         </div>
     </section>
@@ -19,6 +19,9 @@ export default {
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
+    }
+    .aboutDeliveryPhrase{
+        color: #fff;
     }
     .aboutUsDeliveryContainer{
         display: flex;

@@ -14,10 +14,10 @@ app.use(express.json())
 const port = 3001
 
 const con = mysql.createConnection({
-	host: 'localhost',
-	user: 'root',
-	database: 'atlas-shoes',
-	password: '',
+	host: 'web.edu',
+	user: '21046',
+	database: '21046_atlas-shoes',
+	password: 'webbcq',
 })
 
 con.connect(err => {
@@ -695,20 +695,24 @@ app.put('/edit-item', (req, res) => {
   
 })
 
-app.delete('/delete-item', (req, res) => {
-  const { itemId } = req.body
+app.delete('/delete-item/:id', (req, res) => {
+  const itemId = req.params.id
 
-  const deleteQueries =
-    `DELETE FROM item_colors WHERE itemId = ?;
-    DELETE FROM item_sizes WHERE itemId = ?;
-    DELETE FROM wishlist WHERE itemId = ?;
-    DELETE FROM cart WHERE itemId = ?; DELETE FROM items WHERE itemId = ?;`
+  const deleteQueries = [
+    'DELETE FROM item_colors WHERE itemId = ?',
+    'DELETE FROM item_sizes WHERE itemId = ?',
+    'DELETE FROM wishlist WHERE itemId = ?',
+    'DELETE FROM cart WHERE itemId = ?',
+    'DELETE FROM items WHERE itemId = ?',
+  ]
 
-    con.query(deleteQueries, [itemId], (err, results) => {
+  deleteQueries.forEach(query => {
+    con.query(query, [itemId], (err, results) => {
       if (err) {
         console.log(err)
       }
       console.log('Товар удалён')
+    })
   })
 })
 
@@ -772,8 +776,17 @@ app.post('/create-item', (req, res) => {
   })
 })
 
-app.put('/edit-item', (req, res) => {
-  
+app.put('/edit-item/:id', (req, res) => {
+  const itemId = req.params.id
+  const { itemName, itemCategory, itemPrice, itemMaterial, itemLining, itemSole, itemSeason } = req.body
+
+  const query = `UPDATE items SET itemName = ?, itemCategory = ?, itemPrice = ?, itemMaterial = ?, itemLining = ?, itemSole = ?, itemSeason = ? WHERE itemId = ?`
+
+  const itemValues = [itemName, itemCategory, itemPrice, itemMaterial, itemLining, itemSole, itemSeason, itemId]
+
+  con.query(query, itemValues, (err, results) => {
+    if (err) console.log(err)
+  })
 })
 
 app.get('/protected-route', verifyToken, (req, res) => {

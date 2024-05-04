@@ -4,13 +4,18 @@ import { Form, Field, ErrorMessage } from 'vee-validate'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import * as yup from 'yup'
+import router from '@/router';
 
 const route = useRoute()
+const colors = reactive([])
+const sizes = reactive([])
 const itemId = route.params.id
 const editedItem = ref({})
 
 onMounted(() => {
   fetchItem()
+  getColors()
+  getSizes()
 })
 
 const schema = yup.object().shape({
@@ -27,9 +32,32 @@ const fetchItem = async () => {
   axios.get(`http://localhost:3001/item/${itemId}`)
   .then(response => {
     editedItem.value = response.data[0]
+    console.log(editedItem.value)
   })
   .catch(error => {
     console.error(error)
+  })
+}
+
+const getColors = () => {
+  axios.get('http://localhost:3001/get-colors')
+  .then(response => {
+    colors.push(...response.data)
+    console.log(colors[2].colorId)
+  })
+  .catch(error =>{
+    console.log(error)
+  })
+}
+
+const getSizes = () => {
+  axios.get('http://localhost:3001/get-sizes')
+  .then(response => {
+    sizes.push(...response.data)
+    console.log(sizes[9].sizeId)
+  })
+  .catch(error =>{
+    console.log(error)
   })
 }
 
@@ -41,13 +69,14 @@ const editItem = () => {
   .catch(error => {
     console.log(error)
   })
+  router.push({ path: `/catalog` })
 }
 </script>
 <template>
   <div class="container">
     <section class="editProduct">
-      <h2 class="generalName">Добавление товара</h2>
-      <Form @submit="editItem" class="adminForm" :validation-schema="schema">
+      <h2 class="generalName">Изменение товара</h2>
+      <Form class="adminForm" :validation-schema="schema">
         <h2 class="adminSubName">Основная информация</h2>
         <div class="adminFormRow">
           <label class="dataFieldContainer">
@@ -90,8 +119,22 @@ const editItem = () => {
             <ErrorMessage class="alertPhrase" name="itemSeason"/>
           </label>
         </div>
-        <button>Изменить товар</button>
       </Form>
+      <div class="adminColors">
+        <h2 class="adminSubName">Цвета товара</h2>
+        <div class="colorsContainer">
+          <div @click="selectColor(colorKey)" v-for="(color, colorKey) in colors" :key="colorKey" :style="{ backgroundColor: color.colorCode }"
+          class="adminColor"></div>
+        </div>
+      </div>
+      <div class="adminSizes">
+        <h2 class="adminSubName">Размеры товара</h2>
+        <div class="productSizesContainer">
+          <div @click="selectSize(sizeKey)" v-for="(size, sizeKey) in sizes" :key="sizeKey"
+          :class="{ 'activeSize': editItem.sizes.includes(size) }">{{ size.size }}</div>
+        </div> 
+        <button class="addProductButton" @click="editItem">Изменить товар</button>
+      </div>
     </section>
   </div>
 </template>

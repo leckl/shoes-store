@@ -1,4 +1,6 @@
 <script setup>
+  import router from '@/router';
+  import { useRoute } from 'vue-router'
   import axios from 'axios';
   import { Form, Field, ErrorMessage } from 'vee-validate';
   import { computed, onMounted, reactive, ref } from 'vue';
@@ -116,12 +118,13 @@
   .catch(error => {
     console.log(error)
   })
+  router.push({ path: `/catalog` })
   }
 </script>
 <template>
   <section class="addProduct">
     <h2 class="generalName">Добавление товара</h2>
-    <Form @submit="createItem" class="adminForm" :validation-schema="schema">
+    <Form class="adminForm" :validation-schema="schema">
       <h2 class="adminSubName">Основная информация</h2>
       <div class="adminFormRow">
         <label class="dataFieldContainer">
@@ -164,7 +167,6 @@
           <ErrorMessage class="alertPhrase" name="itemSeason"/>
         </label>
       </div>
-      <button>Добавить товар</button>
     </Form>
     <div class="adminColors">
       <h2 class="adminSubName">Цвета товара</h2>
@@ -179,6 +181,7 @@
         :class="{ [activeSize]: CheckIsSizeSelected(sizeKey + 1), [disabledSize]: !CheckIsSizeSelected(sizeKey + 1) }">{{ size.size }}</div>
       </div> 
     </div>
+    <button class="addProductButton" @click="createItem">Добавить товар</button>
   </section>
 </template>
 <style>
@@ -227,5 +230,15 @@
     background-color: #123026;
     padding: 9px 15px;
     color: #fff;
+  }
+  .addProductButton{
+    background-color: #123026;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    padding: 15px;
+    margin-bottom: 50px;
   }
 </style>

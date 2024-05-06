@@ -32,7 +32,7 @@ const fetchItem = async () => {
   axios.get(`http://localhost:3001/item/${itemId}`)
   .then(response => {
     editedItem.value = response.data[0]
-    console.log(editedItem.value)
+    console.log(editedItem.value.sizes.split(' '))
   })
   .catch(error => {
     console.error(error)
@@ -131,10 +131,15 @@ const editItem = () => {
         <h2 class="adminSubName">Размеры товара</h2>
         <div class="productSizesContainer">
           <div @click="selectSize(sizeKey)" v-for="(size, sizeKey) in sizes" :key="sizeKey"
-          :class="{ 'activeSize': editItem.sizes.includes(size) }">{{ size.size }}</div>
+          :class="{ 
+          'activeSize': editedItem.sizes.split(' ').includes(size.size.toString()),
+          'disabledSize': !editedItem.sizes.split(' ').includes(size.size.toString())}">
+          {{ size.size }}</div>
         </div> 
         <button class="addProductButton" @click="editItem">Изменить товар</button>
       </div>
     </section>
   </div>
 </template>
+
+  <!-- 'disabledSize': !editedItem.sizes.split(' ').includes(size) && sizes.includes(size)  -->

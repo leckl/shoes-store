@@ -24,6 +24,10 @@
   let storedSelectedColors = ref(JSON.parse(localStorage.getItem('selectedColors')) || [])
   const activeSize = 'activeSize'
   const disabledSize = 'disabledSize'
+  const file = ref(null);
+  let data = reactive({
+    Upload: ''
+  });
 
   const getColors = () => {
     axios.get('http://localhost:3001/get-colors')
@@ -119,11 +123,40 @@
     console.log(error)
   })
   router.push({ path: `/catalog` })
-  }
+}
+
+  const setFile = (e) => {
+  file.value = e.target.files[0];
+};
+
+const upload = () => {
+  const formData = new FormData();
+  formData.append('file', file.value);
+  axios.post('http://localhost:3001/upload', formData)
+    .then(res => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+onMounted(() => {
+  axios.get('http://localhost:3001/upload')
+    .then((res) => {
+      data = res.data[0];
+      console.log(`image: ${data}`);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 </script>
 <template>
   <section class="addProduct">
     <h2 class="generalName">Добавление товара</h2>
+    <input type="file" ref="fileInput" @change="setFile" />
+    <button @click="upload">Click</button>
     <Form class="adminForm" :validation-schema="schema">
       <h2 class="adminSubName">Основная информация</h2>
       <div class="adminFormRow">

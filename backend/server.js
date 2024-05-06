@@ -742,6 +742,73 @@ app.get('/get-sizes', (req, res) => {
   })
 })
 
+
+app.post('/create-item', (req, res) => {
+  const { itemName, itemCategory, itemPrice, itemMaterial, itemLining, itemSole, itemSeason, itemSizes, itemColors } = req.body;
+
+  const addItemQuery = `INSERT INTO items (itemName, itemCategory, itemPrice, itemMaterial, itemLining, itemSole, itemSeason)
+      VALUES (?, ?, ?, ?, ?, ?, ?)`;
+
+  const values = [itemName, itemCategory, itemPrice, itemMaterial, itemLining, itemSole, itemSeason];
+
+  con.query(addItemQuery, values, (err, result) => {
+      if (err) {
+          console.log(err);
+          return res.status(500).send('Ошибка при добавлении товара');
+      }
+
+      const itemId = result.insertId;
+
+      // Связываем товар с выбранными размерами
+      const insertSizesQuery = `INSERT INTO item_sizes (itemId, sizeId) VALUES (?, ?)`;
+      itemSizes.forEach(element => {
+          con.query(insertSizesQuery, [itemId, element], (err, result) => {
+              if (err) {
+                  console.log(err);
+              }
+          });
+      });
+
+      // Связываем товар с выбранными цветами
+      const insertItemColorsQuery = `INSERT INTO item_colors (itemId, colorId) VALUES (?, ?)`;
+      itemColors.forEach(element => {
+          con.query(insertItemColorsQuery, [itemId, element], (err, result) => {
+              if (err) {
+                  console.log(err);
+              }
+          });
+      });
+
+      console.log('Товар добавлен');
+      return res.status(200).send('Товар добавлен успешно');
+  });
+});
+
+app.post('/upload', upload.single('file'), (req, res) => {
+  const image = req.file.filename;
+  const sql = "INSERT INTO upload (upload) VALUES (?)";
+  con.query(sql, [image], (err, results) => {
+      if (err) {
+          console.log(err);
+          return res.status(500).send('Ошибка при загрузке изображения');
+      }
+      // Получаем ID загруженного изображения
+      const uploadId = results.insertId;
+      // Получаем ID товара из запроса
+      const itemId = req.body.itemId;
+      // Связываем товар с загруженным изображением
+      const insertItemUploadQuery = `INSERT INTO item_upload (item_id, upload_id) VALUES (?, ?)`;
+      con.query(insertItemUploadQuery, [itemId, uploadId], (err, result) => {
+          if (err) {
+              console.log(err);
+              return res.status(500).send('Ошибка при связывании товара с изображением');
+          }
+          console.log('Товар связан с изображением');
+          return res.status(200).send('Изображение загружено и связано с товаром');
+      });
+  });
+});
+
 app.post('/create-item', (req, res) => {
   const { itemName, itemCategory, itemPrice, itemMaterial, itemLining, itemSole, itemSeason , itemSizes, itemColors } = req.body
 
@@ -803,24 +870,24 @@ const storage = multer.diskStorage({
   
   const upload = multer({
     storage: storage
-  })
+})
   
-  app.post('/upload', upload.single('file'), (req, res) => {
-    const image = req.file.filename;
-    const sql = "INSERT INTO upload (upload) VALUES (?)"
-    con.query(sql, [image], (err, results) => {
-      if (err) console.log(err)
-      return res.json({Status: "Успешно"})
-    });
+app.post('/upload', upload.single('file'), (req, res) => {
+  const image = req.file.filename;
+  const sql = "INSERT INTO upload (upload) VALUES (?)"
+  con.query(sql, [image], (err, results) => {
+    if (err) console.log(err)
+    return res.json({Status: "Успешно"})
   });
+});
   
-  app.get('/upload', (req, res) => {
-    const sql = "SELECT * FROM upload";
-    con.query(sql, (err, results) => {
-      if (err) {console.log(err)}
-      return res.json(results)
+app.get('/upload', (req, res) => {
+  const sql = "SELECT * FROM upload";
+  con.query(sql, (err, results) => {
+    if (err) {console.log(err)}
+    return res.json(results)
   });
-  })
+})
 
 app.get('/protected-route', verifyToken, (req, res) => {
   const token = req.headers['authorization']

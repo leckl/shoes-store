@@ -5,19 +5,22 @@ const mysql = require('mysql');
 const app = express(); 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
+const multer = require('multer');
+const path = require('path')
 
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
 app.use(cors());
 app.use(express.json())
+app.use(express.static('public'))
 
 const port = 3001
 
 const con = mysql.createConnection({
-	host: 'web.edu',
-	user: '21046',
-	database: '21046_atlas-shoes',
-	password: 'webbcq',
+	host: 'localhost',
+	user: 'root',
+	database: 'atlas-shoes',
+	password: '',
 })
 
 con.connect(err => {
@@ -788,6 +791,36 @@ app.put('/edit-item/:id', (req, res) => {
     if (err) console.log(err)
   })
 })
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+    cb(null, 'public/image');
+  },
+    filename: (req, file, cb) => {
+    cb(null, file.fieldname + '_' + Date.now() + path.extname(file.originalname));
+  }
+  })
+  
+  const upload = multer({
+    storage: storage
+  })
+  
+  app.post('/upload', upload.single('file'), (req, res) => {
+    const image = req.file.filename;
+    const sql = "INSERT INTO upload (upload) VALUES (?)"
+    con.query(sql, [image], (err, results) => {
+      if (err) console.log(err)
+      return res.json({Status: "Успешно"})
+    });
+  });
+  
+  app.get('/upload', (req, res) => {
+    const sql = "SELECT * FROM upload";
+    con.query(sql, (err, results) => {
+      if (err) {console.log(err)}
+      return res.json(results)
+  });
+  })
 
 app.get('/protected-route', verifyToken, (req, res) => {
   const token = req.headers['authorization']

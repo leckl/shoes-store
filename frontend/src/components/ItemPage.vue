@@ -20,6 +20,7 @@ let sliderNum = ref(1)
 
 onMounted(() => {
   fetchItem()
+  // fetchImage()
   window.addEventListener('resize', handleResize)
   checkIsAdmin()
 })
@@ -37,7 +38,8 @@ const fetchItem = async () => {
   .then(response => {
     item.value = response.data
     console.log(item.value[0].itemId)
-    loadImages()
+    // loadImages()
+    fetchImage()
   })
   .catch(error => {
     console.error(error)
@@ -104,9 +106,22 @@ const deleteItem = () => {
   router.push('/catalog')
 }
 
-const loadImages = () => {
-  images.value = imgs.map(id => {
-    return new URL(`../assets/Items/Item${itemId}-${id}.png`, import.meta.url).href
+// const loadImages = () => {
+//   images.value = imgs.map(id => {
+//     return new URL(`../assets/Items/Item${itemId}-${id}.png`, import.meta.url).href
+//   })
+// }
+
+const fetchImage = () => {
+  axios.get(`http://localhost:3001/image/${itemId}`)
+  .then(response => {
+    console.log(response.data[0].upload)
+    images.value = imgs.map(id => {
+      return `http://localhost:3001/image/${response.data[0].upload}`
+    })
+  })
+  .catch(error => {
+    console.log(error)
   })
 }
 
@@ -136,6 +151,7 @@ const redirectToEdit = () => {
         <div v-if="images.length > 2" class="row">
           <img v-for="(image, id) in images.slice(2)" :key="id"  src="../assets/Items/Item1-1.png" class="itemImage" alt="Item image">
         </div>
+        <img src="" alt="">
       </div>
       <div v-for="(itemInfo, key) in item" :key="key" class="itemInfoContainer">
         <div class="productNameContainer">

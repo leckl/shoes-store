@@ -117,6 +117,8 @@
 
   axios.post('http://localhost:3001/create-item', itemData)
   .then(response => {
+    const itemId = response.data.itemId
+    upload(itemId)
     clearFormData()
   })
   .catch(error => {
@@ -129,9 +131,10 @@
   file.value = e.target.files[0];
 };
 
-const upload = () => {
-  const formData = new FormData();
-  formData.append('file', file.value);
+const upload = (itemId) => {
+  const formData = new FormData()
+  formData.append('file', file.value)
+  formData.append('itemId', itemId)
   axios.post('http://localhost:3001/upload', formData)
     .then(res => {
       console.log(res);
@@ -142,14 +145,6 @@ const upload = () => {
 };
 
 onMounted(() => {
-  axios.get('http://localhost:3001/upload')
-    .then((res) => {
-      data = res.data[0];
-      console.log(`image: ${data}`);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
 });
 </script>
 <template>

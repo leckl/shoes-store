@@ -104,9 +104,9 @@ export default {
             <img @click="redirectToProduct(id)" class="itemPhoto" src="../../assets/Catalog/itemPhoto.png" alt="Item photo">
             <h3 class="itemName">{{ name }} <img class="toFavorite" @click="toggleFavorite" :src="favoriteIcon" alt="Favorite"></h3>
             <p class="itemCategorie">{{ category }}</p>
-            <div class="colorsContainer">
+            <!-- <div class="colorsContainer">
                 <div class="color" v-for="(color, id) in colors.split(' ')" :key="id" :style="{ backgroundColor: color }"></div>
-            </div>
+            </div> -->
             <p class="itemPrice">{{ price }}$</p>
             <button @click="addToCart" class="itemButton">В корзину</button>
          </div>
@@ -118,7 +118,6 @@ export default {
         align-items: center;
         justify-content: space-between;
         font-weight: 600;
-        padding-bottom: 3px;
         overflow: hidden;
         text-overflow: ellipsis;
     }

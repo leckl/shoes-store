@@ -7,7 +7,7 @@ export default {
             filters: [
                 {name: 'search', localisationName: 'Поиск', isOpen: false, options: '',},
                 {name: 'sizes', localisationName: 'Размеры', isOpen: false, options: [36, 37, 38, 39, 40, 41, 42, 43, 44, 45]},
-                {name: 'color', localisationName: 'Цвет', isOpen: false, options: ['Чёрный', 'Белый', 'Тёмно-зелёный']},
+                // {name: 'color', localisationName: 'Цвет', isOpen: false, options: ['Чёрный', 'Белый', 'Тёмно-зелёный']},
                 {name: 'category', localisationName: 'Категория', isOpen: false, options: ['Кроссовки', 'Кеды', 'Сандали']},
                 {name: 'price', localisationName: 'Цена', isOpen: false, options: ['min', 'max']},
             ],

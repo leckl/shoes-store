@@ -93,9 +93,7 @@ const addToCart = () => {
 }
 
 const deleteItem = () => {
-  axios.delete(`http://localhost:3001/delete-item/${itemId}`, {
-    itemId: item.value[0].itemId
-  })
+  axios.delete(`http://localhost:3001/delete-item/${itemId}`)
   .then(response => {
     console.log('Товар был удалён')
   })
@@ -113,12 +111,14 @@ const deleteItem = () => {
 // }
 
 const fetchImage = () => {
-  axios.get(`http://localhost:3001/image/${itemId}`)
+  axios.get(`http://localhost:3001/display-image/${itemId}`)
   .then(response => {
     console.log(response.data[0].upload)
-    images.value = imgs.map(id => {
-      return `http://localhost:3001/image/${response.data[0].upload}`
+    console.log(response.data)
+    images.value = response.data.map(image => {
+      return `http://localhost:3001/images/${image.upload}`
     })
+    console.log(images.value[0])
   })
   .catch(error => {
     console.log(error)
@@ -146,10 +146,10 @@ const redirectToEdit = () => {
     <div v-if="isWideScreen" class="container itemContainer">
       <div class="itemImgContainer">
         <div class="row">
-          <img v-for="(image, id) in images.slice(0, 2)" :key="id" src="../assets/Items/Item1-1.png" class="itemImage" alt="Item image">
+          <img v-for="(image, id) in images.slice(0, 2)" :key="id" :src="image" class="itemImage" alt="Item image">
         </div>
         <div v-if="images.length > 2" class="row">
-          <img v-for="(image, id) in images.slice(2)" :key="id"  src="../assets/Items/Item1-1.png" class="itemImage" alt="Item image">
+          <img v-for="(image, id) in images.slice(2)" :key="id"  :src="image" class="itemImage" alt="Item image">
         </div>
         <img src="" alt="">
       </div>
@@ -164,7 +164,7 @@ const redirectToEdit = () => {
         <div class="productSizesContainer">
           <div v-for="(size, sizeKey) in itemInfo.sizes.split(' ')" class="size">{{ size }}</div>
         </div>
-        <p class="productSubName">Цвета</p>
+        <!-- <p class="productSubName">Цвета</p>
         <swiper v-if="itemInfo.colors.split(' ').length > 3" class="colorsSlider"
         :slides-per-view="3.1"
         :space-between="10"
@@ -173,10 +173,10 @@ const redirectToEdit = () => {
         <swiper-slide v-for="(colorPhoto, colorPhotoKey) in itemInfo.colors.split(' ')" :key="colorPhotoKey">
           <img src="../assets/Items/Item1-1.png" class="colorImage" alt="Color image">
         </swiper-slide>
-        </swiper>
-        <div v-else-if="itemInfo.colors.split(' ').length <= 3" class="productColorsContainer">
+        </swiper> -->
+        <!-- <div v-else-if="itemInfo.colors.split(' ').length <= 3" class="productColorsContainer">
           <img v-for="(colorPhoto, colorPhotoKey) in itemInfo.colors.split(' ')" :key="colorPhotoKey" src="../assets/Items/Item1-1.png" class="colorImage" :style="{ width: 100 / itemInfo.colors.split(' ').length + '%'}" alt="Color image">
-        </div>
+        </div> -->
         <p class="productSubName">Характеристики</p>
         <div class="productSettingsContainer">
           <p class="productSetting">Материал: {{ itemInfo.itemMaterial }}</p>
@@ -223,7 +223,7 @@ const redirectToEdit = () => {
       <div class="productSizesContainer">
         <div v-for="(size, sizeKey) in itemInfo.sizes.split(' ')" class="size">{{ size }}</div>
       </div>
-      <p class="productSubName">Цвета</p>
+      <!-- <p class="productSubName">Цвета</p>
       <swiper v-if="itemInfo.colors.split(' ').length > 3" class="colorsSlider"
       :slides-per-view="3.1"
       :space-between="10"
@@ -232,10 +232,10 @@ const redirectToEdit = () => {
       <swiper-slide v-for="(colorPhoto, colorPhotoKey) in itemInfo.colors.split(' ')" :key="colorPhotoKey">
         <img src="../assets/Items/Item1-1.png" class="colorImage" alt="Color image">
       </swiper-slide>
-      </swiper>
-      <div v-else-if="itemInfo.colors.split(' ').length <= 3" class="productColorsContainer">
+      </swiper> -->
+      <!-- <div v-else-if="itemInfo.colors.split(' ').length <= 3" class="productColorsContainer">
         <img v-for="(colorPhoto, colorPhotoKey) in itemInfo.colors.split(' ')" :key="colorPhotoKey" src="../assets/Items/Item1-1.png" class="colorImage" :style="{ width: 100 / itemInfo.colors.split(' ').length + '%'}" alt="Color image">
-      </div>
+      </div> -->
       <p class="productSubName">Характеристики</p>
       <div class="productSettingsContainer">
         <p class="productSetting">Материал: {{ itemInfo.itemMaterial }}</p>
@@ -264,10 +264,11 @@ const redirectToEdit = () => {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    max-width: 920px;
   }
   .row {
     display: flex;
-    gap: 15px;
+    gap: 20px;
   }
   .itemImage{
     width: 50%;

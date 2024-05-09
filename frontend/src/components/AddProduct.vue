@@ -128,29 +128,46 @@
 }
 
   const setFile = (e) => {
-  file.value = e.target.files[0];
+  // file.value = e.target.files[0]
+  file.value = Array.from(e.target.files)
 };
 
 const upload = (itemId) => {
-  const formData = new FormData()
-  formData.append('file', file.value)
+  if (!Array.isArray(file.value)) {
+    alert("Произошла ошибка при выборе изображений. Пожалуйста, повторите попытку.")
+    return
+  }
+  
+  const formData = new FormData();
+  for (let i = 0; i < file.value.length; i++) {
+    formData.append('file', file.value[i])
+  }
   formData.append('itemId', itemId)
+  
+  if (file.value.length < 2) {
+    alert("Пожалуйста, выберите хотя бы два изображения для загрузки.")
+    return
+  } else if (file.value.length > 4) {
+    alert("Вы пытаетесь загрузить слишком много изображений. Пожалуйста, загрузите не более 4 изображений.")
+    return
+  }
+
   axios.post('http://localhost:3001/upload', formData)
-    .then(res => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
+  .then(res => {
+    console.log(res)
+  })
+  .catch((err) => {
+    console.log(err)
+  })
+}
 
 onMounted(() => {
-});
+})
 </script>
 <template>
   <section class="addProduct">
     <h2 class="generalName">Добавление товара</h2>
-    <input type="file" ref="fileInput" @change="setFile" />
+    <input type="file" ref="fileInput" @change="setFile" multiple/>
     <button @click="upload">Click</button>
     <Form class="adminForm" :validation-schema="schema">
       <h2 class="adminSubName">Основная информация</h2>
@@ -196,12 +213,12 @@ onMounted(() => {
         </label>
       </div>
     </Form>
-    <div class="adminColors">
+    <!-- <div class="adminColors">
       <h2 class="adminSubName">Цвета товара</h2>
       <div class="colorsContainer">
         <div @click="selectColor(colorKey)" v-for="(color, colorKey) in colors" :key="colorKey" :style="{ backgroundColor: color.colorCode }" class="adminColor"></div>
       </div>
-    </div>
+    </div> -->
     <div class="adminSizes">
       <h2 class="adminSubName">Размеры товара</h2>
       <div class="productSizesContainer">

@@ -6,20 +6,22 @@ const app = express();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const multer = require('multer');
-const path = require('path')
+const path = require('path');
+const { error } = require('console');
 
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
 app.use(cors());
 app.use(express.json())
+app.use('/images', express.static(path.join(__dirname, 'public', 'image')));
 
 const port = 3001
 
 const con = mysql.createConnection({
-	host: 'web.edu',
-	user: '21046',
-	database: '21046_atlas-shoes',
-	password: 'webbcq',
+	host: 'localhost',
+	user: 'root',
+	database: 'atlas-shoes',
+	password: '',
 })
 
 con.connect(err => {
@@ -155,7 +157,7 @@ app.post('/sing-up', (req, res) => {
             role: 'user'
           },
           'secretKey',
-          { expiresIn: '48h' }
+          { expiresIn: '10000h' }
         )
 
         res.status(200).json({ token })
@@ -693,20 +695,24 @@ app.get('/is-admin', verifyToken, (req, res) => {
   })
 })
 
-app.delete('/delete-item', (req, res) => {
-  const { itemId } = req.body
+app.delete('/delete-item/:id', (req, res) => {
+  const itemId = req.params.id
 
-  const deleteQueries =
-    `DELETE FROM item_colors WHERE itemId = ?;
-    DELETE FROM item_sizes WHERE itemId = ?;
-    DELETE FROM wishlist WHERE itemId = ?;
-    DELETE FROM cart WHERE itemId = ?; DELETE FROM items WHERE itemId = ?;`
+  const deleteQueries = [
+    `DELETE FROM item_colors WHERE itemId = ?`,
+    `DELETE FROM item_sizes WHERE itemId = ?`,
+    `DELETE FROM wishlist WHERE itemId = ?`,
+    `DELETE FROM cart WHERE itemId = ?`,
+    `DELETE FROM upload WHERE itemId = ?`,
+    `DELETE FROM items WHERE itemId = ?`
+  ]
 
-    con.query(deleteQueries, [itemId], (err, results) => {
+  deleteQueries.forEach(query => {
+    con.query(query, [itemId], (err, results) => {
       if (err) {
-        console.log(err)
+        console.log(err);
       }
-      console.log('Товар удалён')
+    })
   })
 })
 
@@ -757,14 +763,14 @@ app.post('/create-item', (req, res) => {
       })
     })
 
-    const insertItemColorsQuery = `INSERT INTO item_colors (itemId, colorId) VALUES (?, ?)`
-    itemColors.forEach(element => {
-      con.query(insertItemColorsQuery, [itemId, element], (err, result) => {
-        if (err) {
-          console.log(err);
-        }
-      })
-    })
+    // const insertItemColorsQuery = `INSERT INTO item_colors (itemId, colorId) VALUES (?, ?)`
+    // itemColors.forEach(element => {
+    //   con.query(insertItemColorsQuery, [itemId, element], (err, result) => {
+    //     if (err) {
+    //       console.log(err);
+    //     }
+    //   })
+    // })
 
     console.log('Товар добавлен')
     res.json({ itemId: itemId })
@@ -782,20 +788,69 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage
-})
+}).array('file', 4)
 
-app.post('/upload', upload.single('file'), (req, res) => {
-  const image = req.file.filename;
-  const itemId = req.body.itemId
-  const sql = "INSERT INTO upload (upload, itemId) VALUES (?, ?)";
-  con.query(sql, [image, itemId], (err, results) => {
-    if (err) console.log(err)
-    console.log(itemId)
-    return res.json({ status: 'Успешно' })
-  })
-})
+app.post('/upload', (req, res) => {
+  upload(req, res, function(err) {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({ error: err.message });
+    } else if (err) {
+      return res.status(500).json({ error: err.message });
+    }
 
-app.get('/image/:id', (req, res) => {
+    const images = req.files
+    const itemId = req.body.itemId
+
+    if (!images || images.length < 2) {
+      return res.json({ error: 'Пожалуйста, загрузите хотя бы 2 изображения' })
+    } else if (images.length > 4) {
+      return res.json({ error: 'Загрузите не больше 4 изображений' })
+    }
+
+    const placeholders = images.map(() => '(?, ?)').join(', ')
+
+    const values = images.reduce((acc, image) => {
+      acc.push(image.filename, itemId)
+      return acc
+    }, []);
+
+    const sql = `INSERT INTO upload (upload, itemId) VALUES ${placeholders}`
+    
+    con.query(sql, values, (err, results) => {
+      if (err) {
+        console.log(err)
+        return res.status(500).json({ error: 'Внутренняя ошибка сервера' })
+      }
+      console.log(itemId)
+      return res.json({ status: 'Успешно' })
+    });
+  });
+});
+
+// app.post('/upload', (req, res) => {
+//   upload(req, res, function(err) {
+    
+//   })
+//   const images = req.file
+//   const itemId = req.body.itemId
+
+//   if (!images || images.length < 2) {
+//     return res.json({ error: 'Пожалуйста, загрузите хотя бы 2 изображения' })
+//   }
+//   else if (images.length > 4) {
+//     return res.json({ error: 'Загрузите не больше 4 изображений' })
+//   }
+
+//   const sql = "INSERT INTO upload (upload, itemId) VALUES (?, ?)";
+//   const values = images.map(image => [image.filename, itemId])
+//   con.query(sql, [values], (err, results) => {
+//     if (err) console.log(err)
+//     console.log(itemId)
+//     return res.json({ status: 'Успешно' })
+//   })
+// })
+
+app.get('/display-image/:id', (req, res) => {
   const itemId = req.params.id
   const sql = "SELECT upload FROM upload WHERE itemId = ?";
   con.query(sql, [itemId], (err, results) => {

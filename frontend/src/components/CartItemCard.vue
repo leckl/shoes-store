@@ -80,9 +80,9 @@ import axios from 'axios';
         <div class="quantity"><p @click="decreaseQuantity" class="quantityMinusButton">-</p><p class="quantityInfo">{{ quantity }}</p><p @click="increaseQuantity" class="quantityPlusButton">+</p></div>
       </div>
       <p class="cartItemCategory">{{ category }}</p>
-      <div class="cartColorsContainer">
+      <!-- <div class="cartColorsContainer">
         <div class="color" v-for="(color, id) in colors.split(' ')" :key="id" :style="{ backgroundColor: color }"></div>
-      </div>
+      </div> -->
       <p class="itemPrice">{{ price }}$</p>
     </div>
   </div>

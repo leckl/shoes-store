@@ -168,7 +168,6 @@ onMounted(() => {
   <section class="addProduct">
     <h2 class="generalName">Добавление товара</h2>
     <input type="file" ref="fileInput" @change="setFile" multiple/>
-    <button @click="upload">Click</button>
     <Form class="adminForm" :validation-schema="schema">
       <h2 class="adminSubName">Основная информация</h2>
       <div class="adminFormRow">

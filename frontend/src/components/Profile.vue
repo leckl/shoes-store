@@ -52,10 +52,10 @@
   }
 
   const logOut = () => {
+    router.push('/')
     localStorage.removeItem('token')
     localStorage.removeItem('user')
-    
-    router.push('/')
+    // window.location.reload()
   }
 </script>
 <template>

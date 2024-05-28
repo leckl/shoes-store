@@ -1,116 +1,128 @@
 <script>
-import axios from 'axios'
+import axios from 'axios';
+
 export default {
-    props: {
-        id: {
-            type: Number,
-            required: true
-        },
-        name: {
-            type: String,
-            required: true,
-        },
-        category: {
-            type: String,
-            required: true,
-        },
-        price: {
-            type: Number,
-            required: true,
-        },
-        colors: {
-            type: String,
-            required: true,
-        },
+  props: {
+    id: {
+      type: Number,
+      required: true
     },
-    data() {
-        return{
-            inWishList: false
-        }
+    name: {
+      type: String,
+      required: true
     },
-    computed: {
-        favoriteIcon() {
-            return this.inWishList ? new URL(`../../assets/Catalog/toFavoriteSelected.svg`, import.meta.url).href : new URL(`../../assets/Catalog/toFavorite.svg`, import.meta.url).href
-        },
+    category: {
+      type: String,
+      required: true
     },
-    created() {
-        const favoriteStatus = localStorage.getItem(`favorite_${this.id}`)
-        if (favoriteStatus === 'true') {
-            this.inWishList = true
-        }
+    price: {
+      type: Number,
+      required: true
     },
-    mounted() {
-
-    },
-    methods: {
-        toggleFavorite() {
-            this.inWishList = !this.inWishList
-            localStorage.setItem(`favorite_${this.id}`, this.inWishList)
-
-            this.addToWishlist()
-        },
-        redirectToProduct(id) {
-            this.$router.push({ path: `/product/${id}` })
-        },
-        addToWishlist() {
-            const token = localStorage.getItem('token')
-            if (!token) {
-                alert('Вы не авторизованы. Войдите в свою учетную запись, чтобы добавить товар в список желаемого')
-                return
-            }
-
-            axios.post('http://localhost:3001/add-to-wishlist', {
-                itemId: this.id
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            .then(response => {
-                console.log('Товар успешно добавлен в список желаемого')
-            })
-            .catch(error => {
-                console.log(error)
-                alert('Произошла ошибка при добавлении товара в список желаемого')
-            });
-        },
-        addToCart() {
-            const token = localStorage.getItem('token')
-            if (!token) {
-                alert('Вы не авторизованы. Войдите в свою учетную запись, чтобы добавить товар в корзину')
-                return
-            }
-
-            axios.post('http://localhost:3001/add-to-cart', {
-                itemId: this.id
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            .then(response => {
-                console.log('Товар добавлен в корзину')
-            })
-            .catch(error => {
-                console.log(error)
-                alert('Произошла ошибка при добавлении товара в корзину')
-            })
-        },
+    colors: {
+      type: String,
+      required: true
     }
-}
+  },
+  data() {
+    return {
+      imageUrl: '',
+      inWishList: false
+    };
+  },
+  computed: {
+    favoriteIcon() {
+      return this.inWishList
+        ? new URL(`../../assets/Catalog/toFavoriteSelected.svg`, import.meta.url).href
+        : new URL(`../../assets/Catalog/toFavorite.svg`, import.meta.url).href;
+    }
+  },
+  created() {
+    const favoriteStatus = localStorage.getItem(`favorite_${this.id}`);
+    if (favoriteStatus === 'true') {
+      this.inWishList = true;
+    }
+    this.fetchImage();
+  },
+  methods: {
+    toggleFavorite() {
+      this.inWishList = !this.inWishList;
+      localStorage.setItem(`favorite_${this.id}`, this.inWishList);
+      this.addToWishlist();
+    },
+    redirectToProduct(id) {
+      this.$router.push({ path: `/product/${id}` });
+    },
+    addToWishlist() {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Вы не авторизованы. Войдите в свою учетную запись, чтобы добавить товар в список желаемого');
+        return;
+      }
+
+      axios.post('http://localhost:3001/add-to-wishlist', {
+        itemId: this.id
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(response => {
+        console.log('Товар успешно добавлен в список желаемого');
+      })
+      .catch(error => {
+        console.log(error);
+        alert('Произошла ошибка при добавлении товара в список желаемого');
+      });
+    },
+    addToCart() {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Вы не авторизованы. Войдите в свою учетную запись, чтобы добавить товар в корзину');
+        return;
+      }
+
+      axios.post('http://localhost:3001/add-to-cart', {
+        itemId: this.id
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(response => {
+        console.log('Товар добавлен в корзину');
+      })
+      .catch(error => {
+        console.log(error);
+        alert('Произошла ошибка при добавлении товара в корзину');
+      });
+    },
+    fetchImage() {
+      axios.get(`http://localhost:3001/display-card-image/${this.id}`)
+      .then(response => {
+        this.imageUrl = `http://localhost:3001/images/${response.data.upload}` // assuming response contains the image URL
+      })
+      .catch(error => {
+        console.log(error);
+        
+      });
+    }
+  }
+};
 </script>
-    <template>
-        <div class="item">
-            <img @click="redirectToProduct(id)" class="itemPhoto" src="../../assets/Catalog/itemPhoto.png" alt="Item photo">
-            <h3 class="itemName">{{ name }} <img class="toFavorite" @click="toggleFavorite" :src="favoriteIcon" alt="Favorite"></h3>
-            <p class="itemCategorie">{{ category }}</p>
-            <!-- <div class="colorsContainer">
-                <div class="color" v-for="(color, id) in colors.split(' ')" :key="id" :style="{ backgroundColor: color }"></div>
-            </div> -->
-            <p class="itemPrice">{{ price }}$</p>
-            <button @click="addToCart" class="itemButton">В корзину</button>
-         </div>
-    </template>
+
+<template>
+  <div class="item">
+    <img @click="redirectToProduct(id)" class="itemPhoto" :src="imageUrl" alt="Item photo">
+    <h3 class="itemName">{{ name }} <img class="toFavorite" @click="toggleFavorite" :src="favoriteIcon" alt="Favorite"></h3>
+    <p class="itemCategorie">{{ category }}</p>
+    <!-- <div class="colorsContainer">
+      <div class="color" v-for="(color, id) in colors.split(' ')" :key="id" :style="{ backgroundColor: color }"></div>
+    </div> -->
+    <p class="itemPrice">{{ price }}$</p>
+    <button @click="addToCart" class="itemButton">В корзину</button>
+  </div>
+</template>
 <style>
     .itemName{
         height: 40px;

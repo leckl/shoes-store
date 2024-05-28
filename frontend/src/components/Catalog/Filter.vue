@@ -176,7 +176,7 @@ export default {
         outline: none;
     }
     body.menu-open {
-      overflow-y: hidden !important;
+        overflow-y: hidden !important;
     }
     .filters__mobile{
         display: flex;
@@ -187,7 +187,7 @@ export default {
         top: 0px;
         right: 0px;
         padding-top: 170px;
-        z-index: 30;
+        z-index: 40;
         background-color: #fff;
         height: 100%;
         width: 420px;

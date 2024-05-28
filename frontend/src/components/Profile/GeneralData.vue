@@ -29,7 +29,7 @@ import * as yup from 'yup'
 	}
 
 	const updateData = () => {
-		const token = props.token || localStorage.getItem('token');
+		const token = localStorage.getItem('token');
 
 		axios.put('http://localhost:3001/edit-general', {
 			newUserName: values.value.userName,
@@ -73,7 +73,7 @@ import * as yup from 'yup'
 				<p class="dataName">Email</p>
 				<Field class="dataField" v-model="values.userEmail" name="userEmail" id="userEmail" type="text"
 				:placeholder="`${user && user.userEmail ? user.userEmail : 'Email'}`"
-				 />
+				/>
 				<ErrorMessage class="alertPhrase" name="userEmail" />
 			</label>
 		</Form>

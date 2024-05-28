@@ -38,7 +38,6 @@ const fetchItem = async () => {
   .then(response => {
     item.value = response.data
     console.log(item.value[0].itemId)
-    // loadImages()
     fetchImage()
   })
   .catch(error => {

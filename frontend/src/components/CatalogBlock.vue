@@ -78,7 +78,6 @@
           <Filter class="catalogItemCard" @apply-filters="applyFilters"/>
         </section>
         <section class="catalogGrid">
-
           <CatalogItemCard class="item" v-for="item in filteredItems" :key="item.itemId" 
           :id="item.itemId"
           :name="item.itemName" 

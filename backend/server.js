@@ -12,7 +12,6 @@ const { error } = require('console');
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
 app.use(cors());
-app.use(express.json())
 app.use('/images', express.static(path.join(__dirname, 'public', 'image')));
 
 const port = 3001
@@ -197,7 +196,6 @@ app.post('/sing-in', (req, res) => {
           'secretKey',
           { expiresIn: '48h' }
         )
-
         res.status(200).json({ token })
       }
       else {
@@ -850,11 +848,28 @@ app.post('/upload', (req, res) => {
 //   })
 // })
 
+app.get('/display-card-image/:id', (req, res) => {
+  const itemId = req.params.id
+  const sql = 'SELECT upload FROM upload WHERE itemId = ? LIMIT 1'
+
+  con.query(sql, [itemId], (err, results) => {
+    if (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Database error' })
+    }
+    if (results.length > 0) {
+      return res.json(results[0])
+    } else {
+      return res.status(404).json({ error: 'Item not found' })
+    }
+  })
+})
+
 app.get('/display-image/:id', (req, res) => {
   const itemId = req.params.id
   const sql = "SELECT upload FROM upload WHERE itemId = ?";
   con.query(sql, [itemId], (err, results) => {
-    if (err) {console.log(err)}
+    if (err) console.log(err)
     console.log(results)
     return res.json(results)
   })

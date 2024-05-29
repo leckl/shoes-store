@@ -132,6 +132,13 @@
 </template>
 
 <style>
+body {
+  overflow: scroll;
+}
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
 body.menu-open {
   overflow-y: hidden !important;
 }

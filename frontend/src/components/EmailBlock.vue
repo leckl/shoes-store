@@ -42,7 +42,7 @@ const addEmail = () => {
   margin: 0 auto;
   }
   .emailBlock{
-    background-color: #f3f3f3;
+    background-color: #fff;
   }
   .emailBlockContainer{
     display: flex;

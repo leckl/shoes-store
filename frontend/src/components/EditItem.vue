@@ -14,7 +14,7 @@ const editedItem = ref({})
 
 onMounted(() => {
   fetchItem()
-  getColors()
+  // getColors()
   getSizes()
 })
 
@@ -39,16 +39,16 @@ const fetchItem = async () => {
   })
 }
 
-const getColors = () => {
-  axios.get('http://localhost:3001/get-colors')
-  .then(response => {
-    colors.push(...response.data)
-    console.log(colors[2].colorId)
-  })
-  .catch(error =>{
-    console.log(error)
-  })
-}
+// const getColors = () => {
+//   axios.get('http://localhost:3001/get-colors')
+//   .then(response => {
+//     colors.push(...response.data)
+//     console.log(colors[2].colorId)
+//   })
+//   .catch(error =>{
+//     console.log(error)
+//   })
+// }
 
 const getSizes = () => {
   axios.get('http://localhost:3001/get-sizes')
@@ -63,7 +63,7 @@ const getSizes = () => {
 
 const editItem = () => {
   axios.put(`http://localhost:3001/edit-item/${itemId}`, editedItem.value)
-  .then(response => {
+  .then(response => {``
     console.log('Товар изменён')
   })
   .catch(error => {
@@ -120,13 +120,13 @@ const editItem = () => {
           </label>
         </div>
       </Form>
-      <div class="adminColors">
+      <!-- <div class="adminColors">
         <h2 class="adminSubName">Цвета товара</h2>
         <div class="colorsContainer">
           <div @click="selectColor(colorKey)" v-for="(color, colorKey) in colors" :key="colorKey" :style="{ backgroundColor: color.colorCode }"
           class="adminColor"></div>
         </div>
-      </div>
+      </div> -->
       <div class="adminSizes">
         <h2 class="adminSubName">Размеры товара</h2>
         <div class="productSizesContainer">

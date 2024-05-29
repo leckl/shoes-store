@@ -784,6 +784,19 @@ const storage = multer.diskStorage({
 }
 })
 
+app.put('/edit-item/:id', (req, res) => {
+  const itemId = req.params.id
+  const { itemName, itemCategory, itemPrice, itemMaterial, itemLining, itemSole, itemSeason } = req.body
+
+  const query = `UPDATE items SET itemName = ?, itemCategory = ?, itemPrice = ?, itemMaterial = ?, itemLining = ?, itemSole = ?, itemSeason = ? WHERE itemId = ?`
+
+  const itemValues = [itemName, itemCategory, itemPrice, itemMaterial, itemLining, itemSole, itemSeason, itemId]
+
+  con.query(query, itemValues, (err, results) => {
+    if (err) console.log(err)
+  })
+})
+
 const upload = multer({
   storage: storage
 }).array('file', 4)

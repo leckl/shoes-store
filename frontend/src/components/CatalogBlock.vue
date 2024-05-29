@@ -121,6 +121,21 @@
       justify-content: center;
       flex-wrap: wrap;
     }
+    @media screen and (max-width: 1050px){
+      .catalogGrid{
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+    @media screen and (max-width: 840px){
+      .catalogGrid{
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media screen and (max-width: 480px){
+      .catalogGrid{
+        grid-template-columns: 1fr;
+      }
+    }
     .catalogItemCard{
       padding-right: 15px;
     }
